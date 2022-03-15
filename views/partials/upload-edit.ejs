@@ -1,0 +1,47 @@
+    <% if(user) { %> 
+        
+        <% if(upload.User) { %>
+            <input id="Edit-upload-<%=index%>" type="checkbox">
+            <label for="Edit-upload-<%=index%>" class="edit-button">
+                <%- include("icons/edit_icon") -%>
+            </label>
+
+            <% if( user._id !== upload.User && userPermissions.Values[`delete${upload.Type}s`] < upload.Level ) { %>
+            <div class="option-menu" style="--amount : 2">
+                <form method="post" action=<%=`/upload/${upload._id}/hide`%> class="option" style="--order : 1" >
+                    <input onclick="CloseOptionMenu(this)" type="submit" value="Hide" >
+                </form>
+
+                <form method="post" action=<%=`/upload/${upload._id}?_method=DELETE`%> class="option" style="--order : 2" >
+                    <input onclick="CloseOptionMenu(this)" type="submit" value="Delete" >
+                </form>
+            </div>
+            <% } else if( user._id == upload.User._id.toString() ) { %>
+            <div class="option-menu" style="--amount : 2">
+                
+                <a href=<%=`/upload/${upload._id}/Edit`%> onclick="CloseOptionMenu(this)" class="option" style="--order : 1">Edit</a>
+    
+                <form method="POST" action=<%=`/upload/${upload._id}?_method=DELETE`%> class="option" style="--order : 2" >
+                    <input onclick="CloseOptionMenu(this)" type="submit" value="Delete" >
+                </form>
+            </div>
+            <% } else if( user._id !== upload.User._id.toString() ) { %>
+            <div class="option-menu" style="--amount : 2">
+                <input onclick="CloseOptionMenu(this)"class="option" type="submit" value="Hide" style="--order : 1">
+            </div>
+            <% } %>
+        <% } else if(userPermissions.Values[`delete${upload.Type}s`] < upload.Level){ %> 
+            <input id="Edit-upload-<%=index%>" type="checkbox" unchecked>
+            <label for="Edit-upload-<%=index%>" class="edit-button">
+                <%- include("icons/edit_icon") -%>
+            </label>
+            <div class="option-menu" style="--amount : 1">
+
+    
+                <form method="post" action=<%=`/upload/${upload._id}?_method=DELETE`%> class="option" style="--order : 2" >
+                    <input onclick="CloseOptionMenu(this)" type="submit" value="Delete" >
+                </form>
+    
+            </div>
+        <% } %>
+    <% } %>

@@ -1,0 +1,19 @@
+<div class="row">
+    <form enctype="multipart/form-data" method="POST" action=<%=req%>>
+        <input type="text" name="id"  value="<%=nextid%>" style="display: none;">
+        <div class="input post-ui">
+            
+            <p>Blog title</p>
+            <textarea class="comment-input" name ="Blog_title" oninput="ActiveTextarea(this)" onresize="ActiveTextarea(this)" ></textarea>
+            <p>Blog description</p>
+            <textarea  class="post-input" name ="Blog_text" ondragover="ActiveDropZone(this)" ondragleave="DeActiveDropZone(this)" ondrop="DropFile(this,event)" oninput="ActiveTextarea(this)" onresize="ActiveTextarea(this)" ></textarea>
+            <input id="file-1" type="file"name="images" onchange="InputFiles(this)" multiple>
+            
+            <div class="dropzone blogs-post" ondragover="ActiveDropZone(this)" ondragleave="DeActiveDropZone(this)" ondrop="DropFile(this,event)"  ></div>
+        </div>
+        <div class="buttons">
+            <input type="submit" value="Post">
+            <label for="file-1" type="button" class="cancel-button" value="add image"> Add image</label>
+        </div>
+    </form>
+</div>

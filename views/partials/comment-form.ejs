@@ -1,0 +1,16 @@
+
+<form enctype="multipart/form-data" method="POST" action=<%=req %>>
+    <input type="text" name="id"  value="<%=nextid%>" style="display: none;">
+
+    <div class="input comment-ui">
+<%- include("User-image",{user, User : user ,settings})-%>
+        <textarea class="comment-input" name="Comment_Text" oninput="ActiveTextarea(this)" onresize="ActiveTextarea(this)" ondragover="ActiveDropZone(this)" ondragleave="DeActiveDropZone(this)" ondrop="DropFile(this,event)" ></textarea>
+        <div></div>
+        <input name="image" type="file" id="file-input-<%=index%>" onclick="ReadInputFiles(this)" onchange="InputFiles(this , event)" >
+        <div class="dropzone one"></div>
+    </div>
+    <div class="buttons">
+        <input  type="submit" value="Post">
+        <label for="file-input-<%=index%>" type="button" class="cancel-button" value="add image"> Add image</label>
+    </div>
+</form>

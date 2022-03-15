@@ -1,0 +1,29 @@
+<%- include('partials/page-header',{title : title}); -%> 
+
+            <div class="row">
+                <form  action="/users/register" method="POST">
+                    <div class="input register-ui">
+                        <p>Register</p> 
+                        <div class="register-input">    
+                            <p>User ID</p>
+                            <input type="text" class="comment-textarea" name="userID" value="<%= typeof userID !='undefined' ? userID : ''  %>">
+                            <p>User name</p>
+                            <input type="text" class="comment-textarea" name="username" value="<%= typeof username !='undefined' ? username : ''  %>">
+                            <!-- <p>Email (optional)</p>
+                            <input type="email" class="comment-textarea" name="email" 
+                            value="<%= typeof email !='undefined' ? email : ''  %>"> -->
+                            <p>Password</p>
+                            <input type="password" class="comment-textarea" name="password1"
+                            value="<%= typeof password1 !='undefined' ? password1 : ''  %>">
+                            <p>Confirm password</p>
+                            <input type="password" class="comment-textarea" name="password2"
+                            value="<%= typeof password2 !='undefined' ? password2 : ''  %>">
+                        </div>
+                    </div>
+                    <div class="buttons">
+                        <input type="submit" value="Register">
+                    </div>
+                </form>
+            </div>
+
+<%- include('partials/page-footer'); -%> 

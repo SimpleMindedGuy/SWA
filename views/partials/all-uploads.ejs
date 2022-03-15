@@ -1,0 +1,245 @@
+<% uploads.forEach((upload,index)=>{ %>
+
+    
+    <%let UPDate = upload.Upload_Date.toLocaleTimeString('en-UK',{day:'2-digit',month:"2-digit",year:"numeric", hour: 'numeric',minute:"2-digit", hour12: true });%> 
+    <%let MODDate=upload.Modified_Date.toLocaleTimeString('en-UK',{day:'2-digit',month:"2-digit",year:"numeric", hour: 'numeric',minute:"2-digit", hour12: true });%> 
+
+    <% if(upload.Parent_Upload) { %>
+        <%let PUPDate = upload.Parent_Upload.Upload_Date.toLocaleTimeString('en-UK',{day:'2-digit',month:"2-digit",year:"numeric", hour: 'numeric',minute:"2-digit", hour12: true });%> 
+        <%let PMODDate= upload.Parent_Upload.Modified_Date.toLocaleTimeString('en-UK',{day:'2-digit',month:"2-digit",year:"numeric", hour: 'numeric',minute:"2-digit", hour12: true });%> 
+            <div class="upload-meta-data">
+                <div>
+                    <div class="user-image-name">
+                        
+                        <% if (upload.Parent_Upload.User == undefined) { %>
+                            <p>(anonymous)</p>
+                            <%- include("User-image",{user, User : upload.Parent_Upload.User ,settings})-%>
+                        <%}else{ %>
+                            <a href=<%=`/users/${upload.Parent_Upload.User._id}`%> >
+                                <%- include("User-image",{user, User : upload.Parent_Upload.User ,settings})-%> 
+                            </a>
+                            <a href=<%=`/users/${upload.Parent_Upload.User._id}`%> ><%= upload.Parent_Upload.User.User_Name %></a>
+                        <% } %>
+
+                    </div>
+                </div>
+
+                <div>
+                    <p><%= upload.Parent_Upload.Type %></p>
+                </div>
+
+                <div>
+                    <div class="date">
+                        <% if(upload.Parent_Upload.Upload_Date.toString() != upload.Parent_Upload.Modified_Date.toString()) { %>
+                            <div>
+                                <%- include("icons/update_icon") -%>
+                                <p><%= PMODDate%></p>
+                            </div>
+                        <% } %>
+    
+                        <div>
+                            <%- include("icons/upload_icon") -%>
+                            <p><%= PUPDate %></p>
+                        </div>
+                    </div>
+                    <div class="upload-edit">
+                        <%- include('parent-upload-edit',{user,upload,index})  -%>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <% if (upload.Parent_Upload.Type == "project"){ %>
+                    <div class="project">
+                        <div>
+                            <h3><%= upload.Parent_Upload.Content.Title %> </h3>
+    
+                        </div>
+                        <div>
+                            <% if(  upload.Parent_Upload.Content.status ){ %>
+                                <p>Status : <%= upload.Parent_Upload.Content.status %> </p>
+                            <% } else { %>
+                                <p> Status : undefined </p>
+                            <% } %>
+                        </div>
+                    </div>
+    
+                <% } else if (upload.Type == "blog"){ %>
+                    <div class="blog">
+                            <h3><%= upload.Parent_Upload.Content.Title %></h3>
+                            
+                        <p>
+                            <%= upload.Parent_Upload.Content.Text.substring(0,100) + "..." %>
+                        </p>
+                        
+                    </div>
+                <% } %>
+            
+                <hr class="dotted-hr">
+                <div class="upload-meta-data">
+                    <div>
+                        <div class="user-image-name">
+                            <% if (upload.User == undefined) { %>
+                                <p>anonymous</p>
+                            <%}else{ %>
+                                <a href=<%=`/users/${upload.User._id}`%> >
+                                    <%- include("User-image",{user, User : upload.User ,settings})-%> 
+                                </a>
+                                <a href=<%=`/users/${upload.User._id}`%> ><%= upload.User.User_Name %></a>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p><%= upload.Type %></p>
+                    </div>
+
+                    <div>
+                        <div class="date">
+                            <% if(upload.Upload_Date.toString() != upload.Modified_Date.toString()) { %>
+                                <div>
+                                    <%- include("icons/upload_icon") -%>
+
+                                    <p><%= MODDate%></p>
+                                </div>
+                            <% } %>
+        
+                            <div>
+                                <%- include("icons/update_icon") -%>
+                                <p><%= UPDate %></p>
+                            </div>
+                        </div>
+                        <div class="upload-edit">
+                            <%- include('upload-edit',{user,upload,index})  -%>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+                        <%} else { %>
+            <div class="upload-meta-data">
+                <div>
+                    <div class="user-image-name">
+                        <% if (upload.User == undefined) { %>
+                            <%- include("User-image",{user, User : upload.User ,settings})-%>
+                            <p>anonymous</p>
+                        <%}else{ %>
+                            <a href=<%=`/users/${upload.User._id}`%> >
+                                <%- include("User-image",{user, User : upload.User ,settings})-%> 
+                            </a>
+                            <a href=<%=`/users/${upload.User._id}`%> ><%= upload.User.User_Name %></a>
+                        <% } %>
+                    </div>
+                </div>
+
+                <div>
+                    <p><%= upload.Type %></p>
+                </div>
+
+                <div>
+                    <div class="date">
+                        <% if(upload.Upload_Date.toString() != upload.Modified_Date.toString()) { %>
+                            <div>
+                                <%- include("icons/upload_icon") -%>
+                                <p><%= MODDate%></p>
+                            </div>
+                        <% } %>
+        
+                        <div>
+                            <%- include("icons/update_icon") -%>
+                            <p><%= UPDate %></p>
+                        </div>
+                    </div>
+
+                    <div class="upload-edit">
+                        <%- include('upload-edit',{user,upload,index})  -%>
+                    </div>
+                </div>
+            </div>
+            <% } %> 
+            
+            <% if(upload.Type == "post") { %>
+                <div class="row">
+
+                    <div class="post">
+                        <p>
+                            <%= upload.Content.Text %>
+                        </p>
+                        <% if(upload.Content.images.length){ %>
+                            <div class="images">
+                            <% upload.Content.images.forEach((image)=>{ %>
+                                <img alt="" src=<%=`/upload/${upload._id}/image/${image}`%> >
+                            <% }) %>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+
+            <% } else if (upload.Type == "project"){ %>
+                <div class="row">
+
+                    <div class="project">
+                        <div>
+                            <h3><%= upload.Content.Title %> </h3>
+                            <p class="content">
+                                <%= upload.Content.Text %>
+                            </p>
+                                <a href=<%=`/upload/${upload._id}/ `%> class="log-out">View progress</a>
+                            
+                        </div>
+                        <div>
+                            <p>Status : <%= typeof upload.Content.Status !='undefined' ? upload.Content.Status : 'Unknown' %> </p>
+
+                            <% if(upload.Content.images.length){ %>
+                                <% upload.Content.images.forEach((image)=>{ %>
+                                    <img alt="" src=<%=`/upload/${upload._id}/image/${image}`%> >
+                                <% }) %>
+                            <% } else{ %>
+                                <p> no images </p>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            <% } else if (upload.Type == "blog"){ %>
+                <div class="row">
+
+                    <div class="blog">
+                        <h3><%= upload.Content.Title %></h3>
+                        
+                        <p>
+                            <%= upload.Content.Text.substring(0,200) + "..." %>
+                        </p>
+                        <% if(upload.Parent_Upload){ %>
+                            <a href=<%=`/upload/${upload.Parent_Upload._id}/ `%> class="log-out">read more</a>
+                        <% } else { %>
+                            <a href=<%=`/upload/${upload._id}/ `%> class="log-out">read more</a>
+                        <% } %>
+                    </div>
+                </div>
+            <% } %>
+        <div class="row">   
+
+            <% if(userPermissions.Values.hasOwnProperty("writecomments")) {%>
+
+                <%- include('comment-form', {upload , index, req:`/upload/${upload._id}/comment` }); -%> 
+            <% } %>
+            <% if(userPermissions.Values.hasOwnProperty("readcomments") || userPermissions.Values.hasOwnProperty("writecomments")){ %> 
+
+                    <div class="buttons" style="position:static">
+                        <label for="comment-section-<%=index%>" class="show-comment-icon">
+                            <%- include('icons/comments'); -%> 
+                        </label>
+                    </div>
+                    <%- include('comments', {upload , index }); -%> 
+            <% } %>
+        </div>
+
+        
+        <% if(index !== uploads.length-1 ) { %>
+            <hr>
+        <% } %>
+        
+<% }) %>

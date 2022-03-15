@@ -1,0 +1,428 @@
+<%- include('partials/page-header'); -%> 
+
+<div class="profile-imgs">
+    <% if(!userinfo.Cover_Image || userinfo.Cover_Image == "" ) { %>
+        <div>
+            <img src="/icons/defult-cover.svg" >
+            <% if(user && user._id.toString() == userinfo._id){ %> 
+                <label for="Edit-popup-1" class="change-cover-image">
+                    <p style="white-space: nowrap;">change image</p>
+                </label>
+            <%- include('partials/image-popup-form', {input_id : "Edit-popup-1", image_id : "cover-image", del_id : "remove-cover" , req : `/users/${userinfo._id}/cover`, del_req : `/users/${userinfo._id}/cover?_method=DELETE`}) -%>
+           <% } %>
+        </div>
+    <% } else { %> 
+        <div>
+            <img src=<%=`/users/${userinfo._id}/image/${userinfo.Cover_Image}`%> >
+            <% if(user && user._id.toString() == userinfo._id){ %> 
+                <label for="Edit-popup-1" class="change-cover-image">
+                    <p style="white-space: nowrap;">change image</p>
+                </label>
+            <%- include('partials/image-popup-form', {input_id : "Edit-popup-1" , image_id : "cover-image", del_id : "remove-cover" , req : `/users/${userinfo._id}/cover`, del_req : `/users/${userinfo._id}/cover?_method=DELETE`}) -%>
+           <% } %>
+        </div>
+    <% } %>
+    <% if(!userinfo.User_Image || userinfo.User_Image == "" ) { %>
+        <div>
+            
+            <%- include("partials/User-image",{user, User : userinfo  ,settings})-%> 
+             
+            <% if(user && user._id.toString() == userinfo._id){ %> 
+                <label for="Edit-popup-2" class="change-user-image">
+                    <p style="white-space: nowrap;">change image</p>
+                </label>
+            <%- include('partials/image-popup-form', {input_id : "Edit-popup-2" , image_id : "profile-image", del_id : "remove-img"  , req : `/users/${userinfo._id}/image`, del_req : `/users/${userinfo._id}/image?_method=DELETE`}) -%>
+            <% } %>
+
+        </div>
+    <% } else { %> 
+        <div>
+            <img src=<%=`/users/${userinfo._id}/image/${userinfo.User_Image}`%> >
+            <% if(user && user._id.toString() == userinfo._id){ %> 
+                <label for="Edit-popup-2" class="change-user-image">
+                    <p style="white-space: nowrap;">change image</p>
+                </label>
+                <%- include('partials/image-popup-form', {input_id : "Edit-popup-2" , image_id : "profile-image", del_id : "remove-img"  , req : `/users/${userinfo._id}/image`, del_req : `/users/${userinfo._id}/image?_method=DELETE`}) -%>
+            <% } %>
+
+        </div>
+    <% } %>
+
+
+</div>
+
+
+
+<div class="row bio">
+    <h1><%= userinfo.User_Name %> 
+        <% if(user && user._id.toString() == userinfo._id){ %> 
+            <label for="bio-edit" class="profile-edit">
+                <svg
+                    viewBox="0 0 5.2916668 5.2916669"
+                    class="upload-icons"
+                    >
+                    <path
+                    id="rect841"
+                    style="opacity:1;;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers fill stroke"
+                    d="m 3.2699189,0.8982329 1.1183475,1.1183474 c 0.026133,0.026133 0.023153,0.07119 -0.00668,0.1010222 L 2.0194053,4.4797797 c -0.029834,0.029834 -1.94637113,0.7537506 -1.93746819,0.7178829 0,0 0.72450053,-1.9302906 0.75433493,-1.960125 L 3.1688944,0.9049151 c 0.029834,-0.029834 0.074892,-0.032815 0.1010247,-0.00668 z"
+                    sodipodi:nodetypes="csssssscc" />
+                    <rect
+                    style="opacity:1;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers fill stroke"
+                    id="rect880"
+                    width="1.6882606"
+                    height="0.98188043"
+                    x="2.8991148"
+                    y="-2.9078808"
+                    rx="0.066627115"
+                    ry="0.066627115"
+                    transform="rotate(45)" />
+                </svg>
+        
+            </label>
+        <% } %>
+    </h1>
+    <% if(user && user._id.toString() == userinfo._id){ %> 
+        <form class="" method="POST" action=<%=`/users/${userinfo._id}/` %> >
+    
+            <input type="checkbox" name="" id="bio-edit">
+    
+            <div class="input bio-ui">
+                <p>Username</p>
+                <input type="text" name="User_name" style="display: block;" 
+                value="<%= typeof userinfo.User_Name !='undefined' ? userinfo.User_Name : ''  %>"
+                >
+    
+        
+                <p>Welcome message</p>
+                <input type="text" name="Welcome" style="display: block;" 
+                value="<%= typeof userinfo.Welcome !='undefined' ? userinfo.Welcome : ''  %>"
+                >
+    
+                <p>Bio</p>
+                <textarea class="post-input" name ="Bio" oninput="ActiveTextarea(this)" onresize="ActiveTextarea(this)" ><%= typeof userinfo.Bio !='undefined' ? userinfo.Bio : '' %></textarea>
+            </div>
+    
+            <div class="buttons" style="place-items: center;place-self: center;">
+                <input type="submit" value="Update">
+            </div>
+        </form>
+    <% } %>
+    <h3><%= userinfo.Welcome %></h3>
+    <p>
+        <%= userinfo.Bio %>
+    </p>
+
+</div>
+
+<% if(user && user._id.toString() !== userinfo._id &&  userinfo.Skills && userinfo.Skills.length > 0 || user && user._id.toString() == userinfo._id) { %>
+<hr>
+
+<div class="row">
+    
+    <h2>
+        Skills
+        <% if(user && user._id.toString() == userinfo._id){ %> 
+            <label for="add-skill" class="profile-edit">
+                <svg
+                    viewBox="0 0 5.2916668 5.2916669"
+                    class="upload-icons"
+                    >
+                    <path
+                    id="rect841"
+                    style="opacity:1;;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers fill stroke"
+                    d="m 3.2699189,0.8982329 1.1183475,1.1183474 c 0.026133,0.026133 0.023153,0.07119 -0.00668,0.1010222 L 2.0194053,4.4797797 c -0.029834,0.029834 -1.94637113,0.7537506 -1.93746819,0.7178829 0,0 0.72450053,-1.9302906 0.75433493,-1.960125 L 3.1688944,0.9049151 c 0.029834,-0.029834 0.074892,-0.032815 0.1010247,-0.00668 z"
+                    sodipodi:nodetypes="csssssscc" />
+                    <rect
+                    style="opacity:1;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers fill stroke"
+                    id="rect880"
+                    width="1.6882606"
+                    height="0.98188043"
+                    x="2.8991148"
+                    y="-2.9078808"
+                    rx="0.066627115"
+                    ry="0.066627115"
+                    transform="rotate(45)" />
+                </svg>
+    
+            </label>
+        <% }%>
+    </h2>
+
+    <% if(user && user._id.toString() == userinfo._id){ %> 
+        <form method="post" enctype="multipart/form-data" action=<%=`/users/${userinfo._id}/skill`%> >
+            <input type="text" name="id"  value="<%=nextid%>" style="display: none;">
+            <input type="checkbox" id="add-skill">
+            <div class="input skill-ui">
+                <div>
+                    <p>Skill name</p>
+                    <input name="skill_name" type="text" style="display: block;">
+                    <input name="image" type="file" id="drop-zone-1"  onclick="ReadInputFiles(this)" onchange="InputFiles(this)">
+                    <div class="dropzone single" ondragover="ActiveDropZone(this)" ondragleave="DeActiveDropZone(this)" ondrop="DropFile(this,event)">
+                        <label  for="drop-zone-1">
+                            <p class="note">drag and drop to add pictures</p>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <p>Description</p>
+                    <textarea class="post-input" name ="skill_description" oninput="ActiveTextarea(this)" onresize="ActiveTextarea(this)" ></textarea>
+                </div>
+                <div>
+                    <p>Level</p>
+                    <div class="drop-list">
+                        <input id="option-list-1" type="checkbox">
+                        <label for="option-list-1" class="option-list">
+                            <p>Beginner</p>
+                            <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            class="arrow">
+                                <path 
+                                inkscape:transform-center-x="-0.010131665"
+                                inkscape:transform-center-y="-2.9884325"
+                                d="M 22.5,19.465298 12.093831,14.621402 1.5,19.5 6.7348032,10.499998 11.969605,1.5 l 5.265197,8.982651 z"
+                                sodipodi:nodetypes="ccccccc" />
+                            </svg>
+                        </label>
+                        <div class="option-menu" style="--amount : 4">
+                            <input onchange="CloseOptionMenu(this);ChangeOption(this)" type="radio" name="skill_level" id="menu-1-option-1" value="Beginner" checked >
+                            <label class="option"  style="--order : 1" for="menu-1-option-1"><p>Beginner</p></label>
+    
+                            <input onchange="CloseOptionMenu(this);ChangeOption(this)" type="radio" name="skill_level" id="menu-1-option-2" value="Intermediate" >
+                            <label class="option"  style="--order : 2" for="menu-1-option-2"><p>Intermediate</p></label>
+    
+                            <input onchange="CloseOptionMenu(this);ChangeOption(this)" type="radio" name="skill_level" id="menu-1-option-3" value="Good" >
+                            <label class="option"  style="--order : 3" for="menu-1-option-3"><p>Good</p></label>
+    
+                            <input onchange="CloseOptionMenu(this);ChangeOption(this)" type="radio" name="skill_level" id="menu-1-option-4" value="Very Good" >
+                            <label class="option"  style="--order : 4" for="menu-1-option-4"><p>Very Good</p></label>
+    
+                            <input onchange="CloseOptionMenu(this);ChangeOption(this)" type="radio" name="skill_level" id="menu-1-option-5" value="Expert" >
+                            <label class="option"  style="--order : 5" for="menu-1-option-5"><p>Expert</p></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons">
+                <input type="submit" value="post">
+            </div>
+        </form>
+    <% } %>
+
+    <% if(userinfo.Skills != undefined && userinfo.Skills.length != 0){%> 
+        <div class="skill">
+            <h6>Skill</h6>
+            <h6>description/project</h6>
+            <h6>level</h6>
+        </div>
+        
+        <hr>
+    <% } %>
+
+
+    <% userinfo.Skills.forEach((skill,index)=>{ %>
+        <div class="skill">
+            <div >
+                <% if(skill.skill_image){ %>
+                    <img src=<%=`/upload/${skill._id}/image/${skill.skill_image}`%> alt="">
+                <% } %>
+                <p><%=skill.skill_name %></p>
+            </div>
+            <div>
+                <p><%=skill.skill_description %></p>
+            </div>
+            <div>
+                <p><%=skill.skill_level %></p>
+            </div>
+            <div class="upload-edit">
+                <% if(user && user.id.toString() == userinfo._id.toString()) { %> 
+                    <input id="Edit-skill-<%=index%>" type="checkbox">
+                    <label for="Edit-skill-<%=index%>" class="edit-button">
+                        <svg
+                        width="20"
+                        height="5"
+                        viewBox="0 0 5.2916666 1.3229168"
+                        version="1.1"
+                        class="edit-icon"
+                        >
+                            <g
+                            inkscape:label="Layer 1"
+                            inkscape:groupmode="layer"
+                            id="layer1">
+                                <circle
+                                style="fill-opacity:1;stroke:none;stroke-width:0.0978133;stroke-linecap:square;stroke-linejoin:round"
+                                id="path846-3-6"
+                                cx="4.3335695"
+                                cy="0.67886633"
+                                r="0.65526402" />
+                                <circle
+                                style="fill-opacity:1;stroke:none;stroke-width:0.0978133;stroke-linecap:square;stroke-linejoin:round"
+                                id="path846-3-6-7"
+                                cx="2.6790216"
+                                cy="0.67886633"
+                                r="0.65526402" />
+                                <circle
+                                style="fill-opacity:1;stroke:none;stroke-width:0.0978133;stroke-linecap:square;stroke-linejoin:round"
+                                id="path846-3-6-7-5"
+                                cx="0.95849198"
+                                cy="0.67886633"
+                                r="0.65526402" />
+                            </g>
+                        </svg>
+                    </label>
+                    
+                    
+                    <div class="option-menu" style="--amount : 2">
+                        <input onclick="CloseOptionMenu(this)"class="option" type="submit" value="Edit" style="--order : 1">
+                        <form method="post" action=<%=`/users/${userinfo._id}/skill/${skill._id}?_method=DELETE`%> class="option" style="--order : 2" >
+                            <input onclick="CloseOptionMenu(this)" type="submit" value="Delete" >
+                        </form>                 
+                    </div>
+                    
+                <%}%>
+            </div>
+            
+        </div> 
+        <% if (index !== userinfo.Skills.length -1) { %>
+            <hr>
+        <% } %>
+    <% }) %>
+</div>
+<% } %>
+
+
+<% if(user && user._id.toString() !== userinfo._id &&  userinfo.Contacts && userinfo.Contacts.length > 0 ||  user && user._id.toString() == userinfo._id ) { %>
+
+
+<hr>
+
+<div class="row">
+    <h2>Contacts
+        <% if(user && user._id.toString() == userinfo._id){ %> 
+            <label for="add-contact" class="profile-edit">
+                <svg
+                    viewBox="0 0 5.2916668 5.2916669"
+                    class="upload-icons"
+                    >
+                    <path
+                    id="rect841"
+                    style="opacity:1;;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers fill stroke"
+                    d="m 3.2699189,0.8982329 1.1183475,1.1183474 c 0.026133,0.026133 0.023153,0.07119 -0.00668,0.1010222 L 2.0194053,4.4797797 c -0.029834,0.029834 -1.94637113,0.7537506 -1.93746819,0.7178829 0,0 0.72450053,-1.9302906 0.75433493,-1.960125 L 3.1688944,0.9049151 c 0.029834,-0.029834 0.074892,-0.032815 0.1010247,-0.00668 z"
+                    sodipodi:nodetypes="csssssscc" />
+                    <rect
+                    style="opacity:1;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers fill stroke"
+                    id="rect880"
+                    width="1.6882606"
+                    height="0.98188043"
+                    x="2.8991148"
+                    y="-2.9078808"
+                    rx="0.066627115"
+                    ry="0.066627115"
+                    transform="rotate(45)" />
+                </svg>
+    
+            </label>
+        <% }%>
+    </h2>
+
+    <% if(user && user._id.toString() == userinfo._id){ %> 
+        <form method="post" enctype="multipart/form-data" action=<%=`/users/${userinfo._id}/contact`%> >
+            <input type="text" name="id"  value="<%=nextid%>" style="display: none;">
+            <input type="checkbox" id="add-contact">
+            <div class="input skill-ui">
+                <div>
+                    <p>Contact method</p>
+                    <textarea class="comment-input" name ="contact_method" oninput="ActiveTextarea(this)" onresize="ActiveTextarea(this)" ></textarea>
+                </div>
+                <div>
+                    <p>Link</p>
+                    <textarea class="comment-input" name ="contact_link" oninput="ActiveTextarea(this)" onresize="ActiveTextarea(this)" ></textarea>
+                </div>
+                <div>
+                    <p>Icon(optional)</p>
+                    <input name="image" type="file" id="contact_icon"  onclick="ReadInputFiles(this)" onchange="InputFiles(this)">
+                    <div class="dropzone single" ondragover="ActiveDropZone(this)" ondragleave="DeActiveDropZone(this)" ondrop="DropFile(this,event)">
+                        <label  for="contact_icon">
+                            <p class="note">drag and drop to add pictures</p>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons">
+                <input type="submit" value="post">
+            </div>
+        </form>
+    <% } %>
+    
+    <% userinfo.Contacts.forEach((contact,index)=>{ %>
+        <div class="skill">
+            <div>
+                <p> <%= contact.Contact_method %> </p>
+            </div>
+            <div>
+                <p> <%= contact.Contact_link %> </p>
+            </div>
+            <div>
+                <% if(contact.Contact_icon) { %>
+                    <img src=<%=`/upload/${contact._id}/image/${contact.Contact_icon}`%> alt="">
+                <% } %>
+            </div>
+
+            <% if(user && user._id.toString() == userinfo._id){ %> 
+            <div class="upload-edit">
+                        
+                <input id="Edit-contact-<%= index %>" type="checkbox">
+                <label for="Edit-contact-<%= index %>" class="edit-button">
+                    <svg
+                    width="20"
+                    height="5"
+                    viewBox="0 0 5.2916666 1.3229168"
+                    version="1.1"
+                    class="edit-icon"
+                    >
+                        <g
+                        inkscape:label="Layer 1"
+                        inkscape:groupmode="layer"
+                        id="layer1">
+                            <circle
+                            style="fill-opacity:1;stroke:none;stroke-width:0.0978133;stroke-linecap:square;stroke-linejoin:round"
+                            id="path846-3-6"
+                            cx="4.3335695"
+                            cy="0.67886633"
+                            r="0.65526402" />
+                            <circle
+                            style="fill-opacity:1;stroke:none;stroke-width:0.0978133;stroke-linecap:square;stroke-linejoin:round"
+                            id="path846-3-6-7"
+                            cx="2.6790216"
+                            cy="0.67886633"
+                            r="0.65526402" />
+                            <circle
+                            style="fill-opacity:1;stroke:none;stroke-width:0.0978133;stroke-linecap:square;stroke-linejoin:round"
+                            id="path846-3-6-7-5"
+                            cx="0.95849198"
+                            cy="0.67886633"
+                            r="0.65526402" />
+                        </g>
+                    </svg>
+                </label>    
+                <div class="option-menu" style="--amount : 2">
+                    <input onclick="CloseOptionMenu(this)"class="option" type="submit" value="Edit" style="--order : 1">
+                    <form method="post" action=<%=`/users/${userinfo._id}/contact/${contact._id}?_method=DELETE`%> class="option" style="--order : 2" >
+                        <input onclick="CloseOptionMenu(this)" type="submit" value="Delete" >
+                    </form>                 
+                    
+                </div>
+            </div>
+            <% } %>
+        </div>
+        <% if (index !== userinfo.Contacts.length -1) { %>
+            <hr>
+        <% } %>
+    <% }) %>
+    </div>
+</div>
+
+<% } %>
+
+
+<%- include('partials/page-footer'); -%> 

@@ -1,0 +1,228 @@
+<%- include('partials/page-header'); -%> 
+
+<%if (user && upload.User && !upload.Parent_Upload) { %>
+    <% if (upload.Type == "project" && upload.User.id == user._id){ %>
+        <%- include('partials/project-form',{req:`/upload/${upload._id}`}) -%>
+    <% } else if (upload.Type == "blog" && upload.User.id == user._id){ %>
+        <%- include('partials/blog-form',{req:`/upload/${upload._id}`}) -%>
+    <% } %>
+<% } %>
+    
+
+    <%let UPDate = upload.Upload_Date.toLocaleString('en-US',{day:'2-digit',month:"2-digit",year:"numeric", hour:'numeric',minute:"2-digit", hour12: true });%> 
+    <%let MODDate=upload.Modified_Date.toLocaleString('en-US',{day:'2-digit',month:"2-digit",year:"numeric", hour:'numeric',minute:"2-digit", hour12: true });%> 
+            
+                <div class="upload-meta-data">
+                    <div>
+                        <div class="user-image-name">
+                            <% if (upload.User == undefined) { %>
+                                <%- include("partials/User-image",{user, User : upload.User  ,settings})-%> 
+                                <p>anonymous</p>
+                            <%}else{ %>
+                                <a href=<%=`/users/${upload.User._id}`%> >
+                                    <%- include("partials/User-image",{user, User : upload.User  ,settings})-%> 
+                                </a>
+                                <a href=<%=`/users/${upload.User._id}`%> ><%= upload.User.User_Name %></a>
+                            <% } %>
+
+                        </div>
+                    </div>
+
+                    <div>
+                        <p><%= upload.Type %></p>
+                    </div>
+
+                    <div>
+                        <div class="date">
+                            <% if(upload.Upload_Date.toString() != upload.Modified_Date.toString() ) { %>
+                                <div>
+                                    <%- include("partials/icons/update_icon") -%>
+                                    <p><%= MODDate%></p>
+                                </div>
+                            <% } %>
+        
+                            <div>
+                                <%- include("partials/icons/upload_icon") -%>
+                                <p><%= UPDate %></p>
+                            </div>
+                        </div>
+                        <div class="upload-edit">
+                            <%- include('partials/upload-edit',{user,upload,index:-1,userPermissions})  -%>
+                        </div>
+                    </div>
+                </div>
+                <% if(upload.Type == "post") { %>
+                    <div class="row">
+                        <div class="post">
+                            <p>
+                                <%= upload.Content.Text %>
+                            </p>
+                            <% if(upload.Content.images.length){ %>
+                                <div class="images">
+                                <% upload.Content.images.forEach((image)=>{ %>
+                                    <img alt="" src=<%=`/upload/${upload._id}/image/${image}`%> >
+                                <% }) %>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                <% } else if (upload.Type == "project"){ %>
+                    <div class="row">
+                        <div class="project">
+                            <div>
+                                <h3><%= upload.Content.Title %> </h3>
+                                <p class="content">
+                                    <%= upload.Content.Text %>
+                                </p>
+                            </div>
+                            <div>
+                                <p>Status : starting soon</p>
+        
+                                <% if(upload.Content.images.length){ %>
+                                    <% upload.Content.images.forEach((image)=>{ %>
+                                        <img alt="" src=<%=`/upload/${upload._id}/image/${image}`%> >
+                                    <% }) %>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                <% } else if (upload.Type == "blog"){ %>
+                    <div class="row">
+                        <div class="blog">
+                                <h3><%= upload.Content.Title %></h3>
+    
+    
+                        <% let blog = upload.Content.Text %>
+                        <% if(upload.Content.images.length) { %> 
+    
+                            <% let matches = upload.Content.Text.match(/(\[img(\d)+\])+/gm) %>
+                            <% matches.forEach((group)=>{ %> 
+                                <% let images = `<div class="images">` %>
+                                    <% group.match(/(\d)+/gm).forEach((index)=>{ %>
+                                        <% images += `<img src='/upload/${upload._id}/image/${upload.Content.images[(index-1)]}' alt=''>` %>
+                                    <% }) %>
+                                <% images += "</div> <p>" %>
+                                <%  blog = blog.replace(/(\[img(\d)+\])+/,images) %>
+    
+                            <% }) %>
+                        <% } %>
+                        </div>
+
+                        <p>
+                            <%- blog -%>
+                        </p>
+                    </div>
+                <% } %>
+            
+            <% if(userPermissions.Values.writecomments && userPermissions.Values.writecomments !== -1) {%>
+                <div class="row">
+                    <form enctype="multipart/form-data" method="POST" action=<%=`/upload/${upload._id}/comment`%>>
+                        <input type="text" name="id"  value="<%=nextid%>" style="display: none;">
+        
+                        <div class="input comment-ui">
+                            <% if (user == undefined) { %>
+                                <%- include("partials/User-image",{user, User : user  ,settings})-%> 
+                                
+                            <%}else{ %>
+                                <a href=<%=`/users/${user._id}`%> >
+                                    <%- include("partials/User-image",{user, User : user  ,settings})-%> 
+                                </a>
+                                
+                            <% } %>
+                            
+                            <textarea class="comment-input" name="Comment_Text" oninput="ActiveTextarea(this)" onresize="ActiveTextarea(this)" ondragover="ActiveDropZone(this)" ondragleave="DeActiveDropZone(this)" ondrop="DropFile(this,event)" ></textarea>
+                    
+                            
+                            <div></div>
+                            <input name="image" type="file" id="file-input" onclick="ReadInputFiles(this)" onchange="InputFiles(this , event)" >
+                                <div class="dropzone one"></div>
+                        </div>
+                        <div class="buttons">
+                            <input  type="submit" value="Post">
+                            <label for="file-input" type="button" class="cancel-button" value="add image"> Add image</label>
+                        </div>
+                    </form>
+                </div>
+            <% } %>
+            <% if(userPermissions.Values.readcomments && userPermissions.Values.readcomments !== -1 || userPermissions.Values.writecomments && userPermissions.Values.writecomments !== -1){ %> 
+                <div class="row">
+
+                    <div class="buttons" style="position:static">
+                        <label for="comment-section" class="show-comment-icon">
+                            <%- include('partials/icons/comments'); -%> 
+                        </label>
+                    </div>
+    
+                    <input type="checkbox" name="" id="comment-section">
+                    <div  class="comment-section">
+                        <% upload.Comments.forEach((Comment,C_Index)=>{ %>
+                            <div class="comment">
+                                <div class="upload-meta-data">
+                                    <div>
+                                        <div class="user-image-name">
+
+                                            <% if (Comment.User == undefined) { %>
+                                                <p>anonymous</p>
+                                            <%}else{ %>
+                                                <a href=<%=`/users/${Comment.User._id}`%> >
+                                                    <%- include("partials/User-image",{user, User : Comment.User ,settings})-%> 
+                                                </a>
+                                                <a href=<%=`/users/${Comment.User._id}`%> ><%= Comment.User.User_Name %></a>
+                                            <% } %>
+
+                                        </div>
+                                    </div>
+
+                                    <div>
+
+                                    </div>
+
+                                    <div>
+<%let CUPDate  = Comment.Upload_Date.toLocaleString('en-US',{day:'2-digit',month:"2-digit",year:"numeric", hour:'numeric',minute:"2-digit", hour12: true });%> 
+<%let CMODDate = Comment.Modified_Date.toLocaleString('en-US',{day:'2-digit',month:"2-digit",year:"numeric", hour:'numeric',minute:"2-digit", hour12: true });%> 
+                                        <div class="date">
+                                            <div>
+                                                <%- include("partials/icons/upload_icon") -%>
+                                                <p><%= CUPDate %></p> 
+                                            </div>
+                                            <% if(CUPDate !== CMODDate)  {%> 
+                                                <div>
+                                                    <%- include("partials/icons/update_icon") -%>
+                                                    <p><%= CMODDate %></p>
+                                                </div>
+                                            <% }%>
+                                        
+                                        </div>
+                                        <div class="upload-edit">
+                                            <%- include("partials/comment-edit-button",{Comment,C_Index,user,index:-1}) -%>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p>
+                                    <%= Comment.Content.Text %> 
+                                </p>
+                                <% if(Comment.Content.images.length > 0){ %>
+                                    <div class="images">
+                                        <% Comment.Content.images.forEach((image)=> { %>
+                                            <img src=<%=`/upload/${upload._id}/comment/${Comment._id}/image/${image} `%> alt="">
+                                        <% }) %>
+                                    </div>
+                                <% } %>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+            <% } %>
+            
+            
+            
+
+        
+        
+        <hr class="dotted-hr">
+
+        <% if(upload.Sub_Upload && upload.Sub_Upload.length > 0){ %>
+            <%- include('partials/sub-uploads',{uploads:upload.Sub_Upload , user , main : upload,userPermissions}) -%>
+        <% } %>
+
+<%- include('partials/page-footer'); -%>

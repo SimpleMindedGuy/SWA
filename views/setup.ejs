@@ -1,0 +1,42 @@
+<%- include('partials/page-header'); -%> 
+
+<div class="row">
+    <h1>
+        Create the Owner user
+    </h1>
+
+    <p>
+        this user/account have full control over the app.
+        the default account cant really do much because it well always be redirected to this page.
+        if you don't create a setup account someone else can just do that from anywhere.
+        you can re set it if you have access to the database and can delete the current owner user (not recommended).
+        or just delete whole of the website database to reset the website.
+    </p>
+</div>
+
+<div class="row">
+    <form method="POST" action="/users/createowner" >
+        <div class="input register-ui">
+            <div class="register-input">    
+                <p>User ID</p>
+                <input type="text" class="comment-textarea" name="userID" value="<%= typeof userID !='undefined' ? userID : ''  %>">
+                <p>User name</p>
+                <input type="text" class="comment-textarea" name="username" value="<%= typeof username !='undefined' ? username : ''  %>">
+                <!-- <p>Email (optional)</p>
+                <input type="email" class="comment-textarea" name="email" 
+                value="<%= typeof email !='undefined' ? email : ''  %>"> -->
+                <p>Password</p>
+                <input type="password" class="comment-textarea" name="password1"
+                value="<%= typeof password1 !='undefined' ? password1 : ''  %>">
+                <p>Confirm password</p>
+                <input type="password" class="comment-textarea" name="password2"
+                value="<%= typeof password2 !='undefined' ? password2 : ''  %>">
+            </div>
+        </div>
+        <div class="buttons">
+            <input type="submit" value="Register">
+        </div>
+    </form>
+</div>
+
+<%- include('partials/page-footer'); -%>

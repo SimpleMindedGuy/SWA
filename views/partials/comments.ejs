@@ -1,0 +1,64 @@
+
+
+
+<input type="checkbox" name="comment-section-<%=index%>" id="comment-section-<%=index%>" unchecked>
+
+<div  class="comment-section">
+    <% upload.Comments.forEach((Comment,C_Index)=>{ %>
+
+        <%let UPDate = Comment.Upload_Date.toLocaleTimeString('en-UK',{day:'2-digit',month:"2-digit",year:"numeric", hour: 'numeric',minute:"2-digit", hour12: true });%> 
+
+        <%let MODDate=Comment.Modified_Date.toLocaleTimeString('en-UK',{day:'2-digit',month:"2-digit",year:"numeric", hour: 'numeric',minute:"2-digit", hour12: true });%> 
+
+        <div class="comment">
+            <div class="upload-meta-data">
+                <div>
+                    <div class="user-image-name">
+                        <% if (Comment.User== undefined) { %>
+                            <p>(anonymous)</p>
+                        <%}else{ %>
+                            <a href=<%=`/users/${Comment.User._id}`%> >
+                                <%- include("User-image",{user, User : Comment.User ,settings})-%> 
+                            </a>
+                            <a href=<%=`/users/${Comment.User._id}`%> ><%= Comment.User.User_Name %></a>
+                        <% } %>
+
+                    </div>
+                </div>
+
+                <div>
+
+                </div>
+
+                <div>
+                    <div class="date">
+                        <% if(UPDate !== MODDate) { %>
+                            <div>
+                                <%- include("icons/update_icon") -%>
+                                <p><%= MODDate%></p>
+                            </div>
+                        <% } %>
+    
+                        <div>
+                            <%- include("icons/upload_icon") -%>
+                            <p><%= UPDate %></p>
+                        </div>
+                    </div>
+                    <div class="upload-edit">
+                        <%- include("comment-edit-button",{Comment,C_Index,user,index}) -%>
+                    </div>
+                </div>
+            </div>
+            <p>
+                <%= Comment.Content.Text %> 
+            </p>
+            <% if(Comment.Content.images.length > 0){ %>
+                <div class="images">
+                    <% Comment.Content.images.forEach((image)=> { %>
+                        <img src=<%=`/upload/${upload._id}/comment/${Comment._id}/image/${image} `%> alt="">
+                    <% }) %>
+                </div>
+            <% } %>
+        </div>
+    <% }) %>
+</div>

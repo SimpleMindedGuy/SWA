@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html dark= 'true'>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="/styles/main.css">
+        <script src="/js/onload.js"onload="CheckTheme()"></script>
+        <link rel="icon" type="image/svg" href="/icons/defult-user.svg">
+
+        <% if(title !== null){%> 
+            <title><%= title %></title>
+        <% } %>
+    </head>
+
+    <body onload="CheckThemeIcon();checkMSGs()">
+        <% if(title !== "setup") { %> 
+
+            <div class="nav-bar" >
+                
+                <div class="logo">
+                    <% if(settings.options.includes("Personal_Website")) { %>
+                        <% if(title == owner.User_Name){ %>
+                            <a class="at" href="/users/<%= owner._id %>"><%= owner.User_Name %></a>
+                        <% } else { %> 
+                            <a  href="/users/<%= owner._id %>" ><%= owner.User_Name %></a>
+                        <% } %>
+                    <% } else { %>  
+                        <% if(!user){ %>
+                            <a class="at" href="/"><%= settings.name %></a>
+                        <% }else{ %>
+                            <% if(title == user.User_Name){ %> 
+                                <a class="at" href=<%=`/users/${user._id} `%> > <%= user.User_Name %></a>
+                            <% } else { %> 
+                                <a href=<%=`/users/${user._id} `%> > <%= user.User_Name %></a>
+                            <%} %>
+                        <% } %>
+                
+                    <% } %>
+
+                </div>
+    
+                <div class="nav-bar-options">
+                    <% if(title == "home" || title == "Home"){ %> 
+                        <a class="at" href="/home" >Home</a>
+                    <% } else { %> 
+                        <a href="/home" >Home</a>
+                    <% } %>
+    
+                    <% if(title == "projects" || title == "Projects") { %>
+                        <a class="at" href="/projects" >Projects</a>
+                    <% } else { %> 
+                        <a  href="/projects" >Projects</a>
+                    <% } %>
+    
+                    <% if(title == "blogs" || title == "Blogs") { %>
+                        <a class="at" href="/blogs">Blogs</a>
+                    <% } else { %> 
+                        <a href="/blogs">Blogs</a>
+                    <% } %>
+    
+                    
+                </div>
+    
+                <div class="nav-bar-icons">
+                    <% if(!user){ %>
+                        <% if(title =="log-in" ) {%>
+                            <a href="/users/register">
+                                <%- include('icons/register') -%>
+                            </a>
+                            <% }else { %> 
+                            <a href="/users/login">
+                                    <%- include('icons/login') -%>
+                            </a>
+                        <% }%>
+                    <% }else{ %>
+                        <a href=<%=`/users/logout `%> > 
+                            <%- include('icons/logout') -%>
+                        </a>
+                    <% } %>
+
+                    
+                    <input type="checkbox" name="theme" id="theme"  onclick="ChangeTheme(this)">
+                    <label for="theme" class="mode-switch">
+                        
+                        <img src="/icons/drawing.svg" alt="">
+                        <img src="/icons/moon.svg" alt="">
+                        
+                    </label>
+                    <input type="checkbox" name="" id="nav-menu" unchecked>
+                    <label for="nav-menu" class="burger" >
+                        <div class="line1"></div>
+                        <div class="line2"></div>
+                        <div class="line3"></div>
+                    </label>
+                    <div class="nav-bar-menu">
+                        <% if(title == "home" || title == "Home"){ %> 
+                            <a class="at" href="/home" style="--order : 1">Home</a>
+                        <% } else { %> 
+                            <a href="/home" style="--order : 1">Home</a>
+                        <% } %>
+    
+                        <% if(title == "projects" || title == "Projects") { %>
+                            <a class="at" href="/projects" style="--order : 2">Projects</a>
+                        <% } else { %> 
+                            <a  href="/projects" style="--order : 1">Projects</a>
+                        <% } %>
+    
+                        <% if(title == "blogs" || title == "Blogs") { %>
+                            <a class="at" href="/blogs" style="--order : 1">Blogs</a>
+                        <% } else { %> 
+                            <a href="/blogs" style="--order : 1">Blogs</a>
+                        <% } %>
+
+                        <% if(title == "User List" || title == "user list") { %>
+                            <a class="at" href="/users/list" style="--order : 1">Users List</a>
+                        <% } else { %> 
+                            <a href="/users/list" style="--order : 1">Users List</a>
+                        <% } %>
+
+                        <% if(userPermissions.Values.hasOwnProperty('readroles')) { %> 
+                            <% if(title == "User Groups" || title == "user groups") { %>
+                                <a class="at" style="--order : 1" href="/usergroups">User Groups</a>
+                            <% } else { %> 
+                                <a href="/usergroups" style="--order : 1">User Groups</a>
+                            <% } %>
+                        <% } %>
+                        
+                        <% if(user && user.SetupAccount) { %> 
+                            <% if(title == "Settings" || title == "settings") { %>
+                                <a class="at" style="--order : 1" href="/settings">Settings</a>
+                            <% } else { %> 
+                                <a href="/settings" style="--order : 1">Settings</a>
+                            <% } %>
+                        <% } %>
+                    </div>
+                </div>
+                    
+            </div>
+        <%} %>
+        <% if(title == "User Groups" ){ %>
+            <input type="checkbox" id="permissions" unchecked>
+            <div class="page"> 
+        <% } else if(title == "User List") { %> 
+            <div class="page user-group-list"> 
+                
+        <%}else { %> 
+            <div class="page"> 
+    
+                <div class="float_message">
+                    <%- include('errors') -%>
+                </div>
+
+                
+
+        <% } %>
+
+        

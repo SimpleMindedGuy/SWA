@@ -1,0 +1,57 @@
+<% if(error != '') { %> 
+    
+    <% if(Array.isArray(error)) { %> 
+        <% error.forEach((msg,index)=>{ %> 
+            <input type="checkbox" checked id="error-msg-index-<%= index %>">
+            <div class="error-msg">
+                <p><%= msg %></p>
+                <label for="error-msg-index-<%= index %>" class="burger" onmousedown="RemoveErrorMsg(this)" style="display: grid;" >
+                    <div class="line1 active"></div>
+                    <div class="line2 active" style="opacity: 0;"></div>
+                    <div class="line3 active"></div>
+                </label>
+            </div>
+
+        <% }) %>
+    <%} else {%>
+
+    <input type="checkbox" checked id="error-msg-index-0" >
+    <div class="error-msg">
+        <p><%= error %></p>
+        <label for="error-msg-index-0" class="burger" onmousedown="RemoveErrorMsg(this)" style="display: grid;" >
+            <div class="line1 active"></div>
+            <div class="line2 active" style="opacity: 0;"></div>
+            <div class="line3 active"></div>
+        </label>
+    </div>
+    <% } %>
+<% } %>
+
+<% if(success != '') { %> 
+    
+    <% if(Array.isArray(success)) { %> 
+        <% success.forEach((msg,index)=>{ %> 
+            <input type="checkbox" checked id="success-msg-index-<%= index%>" >
+            <div class="success-msg">
+                <p><%= msg %></p>
+                <label for="success-msg-index-<%= index%>" class="burger"  onmousedown="RemoveErrorMsg(this)" style="display: grid;" >
+                    <div class="line1 active"></div>
+                    <div class="line2 active" style="opacity: 0;"></div>
+                    <div class="line3 active"></div>
+                </label>
+            </div>
+
+        <% }) %>
+    <%} else { %> 
+        <input type="checkbox" checked id="success-index-0" >
+        <div class="success-msg">
+            
+            <p><%= success %></p>
+            <label class="burger" style="display: grid;" onmousedown="RemoveErrorMsg(this)" for="success-index-0">
+                <div class="line1 active"></div>
+                <div class="line2 active" style="opacity: 0;"></div>
+                <div class="line3 active"></div>
+            </label>
+        </div>
+    <% }%>
+<% } %>

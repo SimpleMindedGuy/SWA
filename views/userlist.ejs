@@ -1,0 +1,104 @@
+<%- include('partials/page-header'); -%> 
+
+<% if(UserList) { %>
+    <form method="Post" action="/users/list" style="display: grid;">
+        <div class="user-list">
+            <div class="row">
+                <h1>
+                    User List
+                </h1>
+                <div class="add-remove-delete-option">
+                    <input type="radio" name="request" id="add" checked value="add">
+                    <label for="add">
+                        <p>Add</p>
+                    </label>
+                        
+                    <input type="radio" name="request" id="remove"      value="remove">
+                    <label for="remove">
+                        <p>Remove</p>
+                    </label>
+
+                    <input type="radio" name="request" id="delete"      value="delete">
+                    <label for="delete">
+                        <p>Delete</p>
+                    </label>
+                    
+                </div>
+                <p> Add : add user/s to group/s
+                    Remove : remove user/s from group/s
+                    delete : delete users (won't delete groups)
+                </p>
+            </div>
+        <% UserList.forEach((usr,index)=>{ %>
+
+            <% if(userPermissions.Values.hasOwnProperty("manageusers") && userPermissions.Values["manageusers"] < usr.Roles[0].Priority) { %> 
+            <input type="checkbox" id="<%=`${usr.User_ID}`%>" value="<%=`${usr.User_ID}`%>" name="Users" onchange="showSubmitButton()">
+            <% } %>
+            <div class="user-list-element">
+                <div>
+                    <%- include("partials/User-image",{User : usr}) -%>
+                    <h6><%= usr.User_Name %></h6>
+                </div>
+                <div class="badges">
+                    <% usr.User_Groups.forEach((role,i)=> { %> 
+                        <div class="badge" 
+                            style="background-color: <%= typeof role.Group_Color != 'undefined' ? role.Group_Color : 'var(--title-color)'; %>">
+                            <p><%= role %></p>
+
+                        </div>
+                    <% })%>
+                </div>
+                    <% if(userPermissions.Values.hasOwnProperty("manageusers") && userPermissions.Values["manageusers"] < usr.Roles[0].Priority) { %> 
+                        <label class="cancel-button" for="<%=`${usr.User_ID}`%>">
+                            <%- include("partials/icons/plus_icon") -%>
+                        </label>
+                    <% } %>
+            </div>
+            <hr>
+        <% }) %>
+        </div>
+    
+        <div class="group-list-slide active" >
+            <div class="row" style="margin-bottom: 20px;">
+                <h1 >
+                    User Group List
+                </h1>
+            </div>
+            <% if(UserGroupList){ %>
+                <% UserGroupList.forEach((group,index)=>{ %>
+                    <div class="row group-checkbox">
+                        <h6>
+                            <%= group.Group_Name %>
+                        </h6>
+                        <input type="checkbox" name="Groups" id="<%=group.Group_Name%>" value="<%=group.Group_Name%>" onchange="showSubmitButton();checkMSGs()" >
+                        <label class="cancel-button" for="<%=group.Group_Name%>">
+                            <%- include("partials/icons/plus_icon") -%>
+                        </label>
+                    </div>
+                    <hr>
+                <% }) %>
+            <% } %>
+        </div>
+
+        <div class="float_message" >
+            <%- include('partials/errors') -%>
+            <input type="checkbox" id="reset" >
+            <div class="success-msg form " onload="checkMSGs()" >
+                <p>apply changes</p>
+                <div>
+
+                    <label class="warning-button" for="reset" onclick="uncheckUserAndGroups()" >
+                        <%- include('partials/icons/cross'); -%> 
+                    </label>
+                    
+                    <label class="accept-button" for="apply"  onclick="checkMSGs()">
+                        <%- include('partials/icons/check'); -%> 
+                    </label>
+                    <input style="display: none; "type="submit" id="apply">
+                    
+                </div>
+            </div>
+        </div>
+    </form>
+<% } %>
+<%- include('partials/page-footer'); -%>

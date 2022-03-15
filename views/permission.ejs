@@ -1,0 +1,250 @@
+<%- include('partials/page-header'); -%> 
+        <div class="row">
+            <h1>UserGroups Permissions</h1>
+        </div>
+        <hr>
+
+    <div style="width: 100%;">
+
+        <% if(userPermissions.Values.hasOwnProperty('writeroles')) { %> 
+            <form method="POST" action="/usergroups" class="row ordered-list-container">
+                <div class="ordered-list-element-form">
+                    <div>
+                        <input type="submit" value="" id="newgroup" style="display : none">
+                        <label for="newgroup" class="accept-button">
+                            <%- include('partials/icons/plus_icon'); -%>
+                        </label>
+                    </div>
+                    <div>
+                        <input type="text" name="Group_Name">
+                    </div>
+                    <div class="list-element-edit">
+                    </div>
+                </div>
+            </form>
+        <% } %>
+    </div>
+
+    <% if(userPermissions.Values.hasOwnProperty('manageroles')) { %> 
+        <div class="row ordered-list-container">
+            
+            <% for(let i = 0 ; i < userPermissions.Values['writeroles']+1 ; i++){ %>
+
+                <div class="ordered-list-element noselect">
+                    <div>
+                    </div>
+                    <div>
+                        <p style="place-self: center;"><%=groups[i].Group_Name%></p>
+                    </div>
+                    <div>
+                        <p style="place-self: center;">Members : </p>
+                    </div>
+                    <div class="list-element-edit">
+                        
+                        <p><%= i %></p>
+                    </div>
+                </div>
+                
+            <% } %>
+        </div>
+                
+        <% for(let i = userPermissions.Values['deleteroles'] +1; i < groups.length-1 ; i++){ %>
+            <% if(groups[i].Group_Name != Def_Role) { %>
+                <form method="POST" action="/usergroups/<%= groups[i].Group_Name %>?_method=DELETE" style="display: none;">
+                    <input type="submit" value="" id="<%= groups[i].Group_Name %>delete">
+                </form>
+
+            <% } %>
+        <% } %>
+        
+        <form method="POST" action="/usergroups?_method=PUT">
+            <div class="row editable-ordered-list-container">
+
+                <% for(let i = userPermissions.Values['manageroles'] +1; i < groups.length-1 ; i++){ %>
+                    <div draggable="true" class="editable-ordered-list-element noselect">
+                        <div>
+                            <%- include('partials/icons/move-h'); -%> 
+                        </div>
+                        <div>
+                            <p style="place-self: center;"><%=groups[i].Group_Name%></p>
+                        </div>
+                        <div>
+                            <p style="place-self: center;">Members : </p>
+                        </div>
+                        <div class="list-element-edit">
+                            <div class="element-edit">
+                                <% if(userPermissions.Values.hasOwnProperty('deleteroles') && userPermissions.Values["deleteroles"] < groups[i].Priority && groups[i].Group_Name != Def_Role ) { %> 
+                                    <label class="burger" style="display: grid;" for="<%= groups[i].Group_Name %>delete">
+                                        <%- include('partials/icons/trash_can'); -%> 
+                                    </label>
+                                <% } %>
+                                <label class="burger"style="display: grid;" for="<%= groups[i].Group_Name %>">
+                                    <%- include('partials/icons/gear'); -%> 
+                                </label>
+                            </div>
+                            <p><%= i %></p>
+                            <input type="checkbox" name="<%= groups[i].Group_Name %>" value="<%=i%> ">
+                        </div>
+                    </div>
+    
+                <% } %>
+            </div>
+
+            <div class="float_message">
+                <%- include('partials/errors') -%>
+
+                <input type="checkbox" id="reset" onchange="checkMSGs()">
+                <div class="success-msg ">
+                    <p>apply changes</p>
+                    <div>
+
+                        <label class="warning-button" for="reset" onclick="resetEditableList()">
+                            <%- include('partials/icons/cross'); -%> 
+                        </label>
+                        
+                        <label class="accept-button" for="apply">
+                            <%- include('partials/icons/check'); -%> 
+                        </label>
+                        <input style="display: none; "type="submit" id="apply">
+                        
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="row ordered-list-container">
+            
+
+            <div class="ordered-list-element noselect">
+                <div>
+                </div>
+                <div>
+                    <p style="place-self: center;"><%=groups[groups.length-1].Group_Name%></p>
+                </div>
+                <div>
+                    <p style="place-self: center;">Members : </p>
+                </div>
+                <div class="list-element-edit">
+                    
+                    <p><%= groups.length-1 %></p>
+                </div>
+            </div>
+
+        </div>
+    <% } else { %> 
+        <div class="row ordered-list-container">
+            <% groups.forEach((group,index) =>{ %>
+                <div class="editable-ordered-list-element noselect">
+                    <div>
+                    </div>
+                    <div>
+                        <p style="place-self: center;"><%=group.Group_Name%></p>
+                    </div>
+                    <div>
+                        <p style="place-self: center;">Members : </p>
+                    </div>
+                    <div class="list-element-edit">
+                        
+                        <p><%= index %></p>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    <% }%>
+
+    <% if(userPermissions.Values.hasOwnProperty('manageroles')) { %> 
+        <% for(let i = userPermissions.Values['writeroles']+1; i < groups.length ; i++){ %>
+            
+            <input type="radio" name="groups" id="<%= groups[i].Group_Name%>" unchecked onchange="ShowHidePermissions()">
+            <form class="right-slide-tile" method="Post" enctype="multipart/form-data" action="/usergroups/<%= groups[i].Group_Name %>?_method=PUT">
+                <div class="icon-buttons">
+                    <label class="icon-button" for="permissions" onclick="ClearRadioSelection()" >
+                        <%- include('partials/icons/cross'); -%> 
+                    </label>
+                </div>
+
+                <div class="row">
+                    <h1> <%= groups[i].Group_Name %></h1>
+                </div>
+                <hr>
+                <div class="row">
+                    <h2> Actions </h2>
+                </div>
+                
+                <div class="row">
+                    <% Act.forEach((act,index)=>{ %>
+                        <div class="permissions">
+ 
+                            <p>
+                                <%= act.Action_Description %>
+                            </p>
+        
+                            <% if(groups[i].Group_Actions.includes(act.Action) ) { %> 
+                                
+                                <% if(userPermissions.Act.hasOwnProperty(`${act.Action}`) ) { %> 
+                                    <input type="checkbox" checked name="Actions" id=<%=`${i}${act.Action}`%> value=<%= `${act.Action}` %> >
+                                <%} else { %> 
+                                    <input type="checkbox" checked disabled name="Actions" id=<%=`${i}${act.Action}`%> value=<%= `${act.Action}` %> >
+                                <% } %>
+
+                            <% } else { %>
+                                
+                                <% if(userPermissions.Act.hasOwnProperty(`${act.Action}`)) { %> 
+                                    <input type="checkbox" unchecked name="Actions" id=<%=`${i}${act.Action}`%> value=<%= `${act.Action}` %> >
+                                <%} else { %> 
+                                    <input type="checkbox" unchecked disabled name="Actions" id=<%=`${i}${act.Action}`%> value=<%= `${act.Action}` %> >
+                                <% } %>
+
+                            <% } %>
+                            <label class="permission" for=<%=`${i}${act.Action}`%> name=<%=`${act.Action}`%> >
+                                <p><%= `${act.Action}` %></p>
+                            </label>    
+                        </div>
+                        <% if(index !== Act.length-1){ %>
+                            <hr>
+                        <% } %>
+                        
+
+                    <% }) %>
+                </div>
+                <hr>
+                <div class="row">
+                    <h2>Resources</h2>
+                </div>
+
+                <div class="row">
+                <% Rec.forEach((rec,index)=>{ %>
+                    <div class="permissions">
+                        <p> <%=`${rec.Resource_Description}`%> </p>
+                        <% if(groups[i].Group_Resources.includes(rec.Resource) ) { %> 
+                            
+                            <% if(userPermissions.Rec.hasOwnProperty(`${rec.Resource}`) ) { %> 
+                                <input type="checkbox" checked  name=Resources id=<%=`${i}${rec.Resource}`%> value=<%= `${rec.Resource}` %>>
+                            <% } else { %> 
+                                <input type="checkbox" checked disabled name=Resources id=<%=`${i}${rec.Resource}`%> value=<%= `${rec.Resource}` %>>
+                            <% } %>
+                        <% } else { %>
+
+                            <% if(userPermissions.Rec.hasOwnProperty(`${rec.Resource}`) ) { %> 
+                                <input type="checkbox" unchecked  name=Resources id=<%=`${i}${rec.Resource}`%> value=<%= `${rec.Resource}` %>>
+                            <% } else { %> 
+                                <input type="checkbox" unchecked disabled name=Resources id=<%=`${i}${rec.Resource}`%> value=<%= `${rec.Resource}` %>>
+                            <% } %>
+                        <% } %>  
+                            <label class="permission" for=<%=`${i}${rec.Resource}`%> name=<%=`${rec}`%> >
+                                <p><%= rec.Resource %></p>
+                            </label>
+                    </div>
+                    <% if(index !== Rec.length-1){ %>
+                        <hr>
+                    <% } %>
+                <% }) %>
+                </div>
+                <div class="row" style="margin: 20px auto;">
+                    <input type="submit" value="Save">
+                </div>
+            </form>
+        <% } %>
+    <% } %>
+
+<%- include('partials/page-footer'); -%>

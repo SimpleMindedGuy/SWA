@@ -1,0 +1,10 @@
+<%- include('partials/page-header',{settings,owner,user}); -%> 
+
+<% if(userPermissions.Values.hasOwnProperty("writeblogs") && !settings.options.includes("Personal_Website")) {%> 
+    <%- include('partials/blog-form',{uploads,user,req:"/blogs",nextid}) -%>
+<% } %>
+
+
+<%- include('partials/all-uploads',{uploads,user}) -%>
+
+<%- include('partials/page-footer'); -%>

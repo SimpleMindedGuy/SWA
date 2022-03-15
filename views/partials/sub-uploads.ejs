@@ -1,0 +1,118 @@
+<% uploads.forEach((upload,index)=>{ %>
+
+    <%let UPDate = upload.Upload_Date.toLocaleTimeString('en-UK',{day:'2-digit',month:"2-digit",year:"numeric", hour: 'numeric',minute:"2-digit", hour12: true });%> 
+    <%let MODDate=upload.Modified_Date.toLocaleTimeString('en-UK',{day:'2-digit',month:"2-digit",year:"numeric", hour: 'numeric',minute:"2-digit", hour12: true });%> 
+            <div class="row">
+                <div class="upload-meta-data">
+                    <div>
+                        <div class="user-image-name">
+                            <% if (upload.User == undefined) { %>
+                                <p>anonymous</p>
+                            <%}else{ %>
+                                <a href=<%=`/users/${upload.User._id}`%> >
+                                    <%- include("User-image",{user, User : upload.User ,settings})-%> 
+                                </a>
+                                <a href=<%=`/users/${upload.User._id}`%> ><%= upload.User.User_Name %></a>
+                            <% } %>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <p><%= upload.Type %></p>
+                    </div>
+
+                    <div>
+                        <div class="date">
+                            <% if(upload.Upload_Date.toString() != upload.Modified_Date.toString()) { %>
+                                <div>
+                                    <%- include("/icons/update_icon") -%>
+                                    <p><%= MODDate%></p>
+                                </div>
+                            <% } %>
+        
+                            <div>
+                                <%- include("icons/upload_icon") -%>
+                                <p><%= UPDate %></p>
+                            </div>
+                        </div>
+                        <div class="upload-edit">
+                            <%- include('upload-edit',{user,upload,index}) -%>
+                        </div>
+                    </div>
+                </div>
+            <% if(upload.Type == "post") { %>
+        
+                <div class="post">
+                    <p>
+                        <%= upload.Content.Text %>
+                    </p>
+                    <% if(upload.Content.images.length){ %>
+                        <div class="images">
+                        <% upload.Content.images.forEach((image)=>{ %>
+                            <img alt="" src=<%=`/upload/${upload._id}/image/${image}`%> >
+                        <% }) %>
+                        </div>
+                    <% } %>
+                </div>
+            <% } else if (upload.Type == "project"){ %>
+                <div class="project">
+                    <div>
+                        <h3><%= upload.Content.Title %> </h3>
+                        <p class="content">
+                            <%= upload.Content.Text %>
+                        </p>
+                    </div>
+                    <div>
+                        <p>Status : starting soon</p>
+
+                        <% if(upload.Content.images.length){ %>
+                            <% upload.Content.images.forEach((image)=>{ %>
+                                <img alt="" src=<%=`/upload/${upload._id}/image/${image}`%> >
+                            <% }) %>
+                        <% } %>
+                    </div>
+                </div>
+            <% } else if (upload.Type == "blog"){ %>
+                <div class="blog">
+                    <h3><%= upload.Content.Title %></h3>
+
+
+                    <% let blog = upload.Content.Text %>
+                    <% if(upload.Content.images.length) { %> 
+
+                        <% let matches = upload.Content.Text.match(/(\[img(\d)+\])+/gm) %>
+                        <% matches.forEach((group)=>{ %> 
+                            <% let images = `<div class="images">` %>
+                                <% group.match(/(\d)+/gm).forEach((index)=>{ %>
+                                    <% images += `<img src='/upload/${upload._id}/image/${upload.Content.images[(index-1)]}' alt=''>` %>
+                                <% }) %>
+                            <% images += "</div> <p>" %>
+                            <%  blog = blog.replace(/(\[img(\d)+\])+/,images) %>
+
+                        <% }) %>
+                    <% } %>
+
+                        <p>
+                            <%- blog -%>
+                        </p>
+                    </div>
+            <% } %>
+
+            <% if(userPermissions.Values.hasOwnProperty("writecomments")) {%>
+                <%- include('comment-form', {upload , index, req:`/upload/${upload._id}/comment`}); -%> 
+            <% } %>
+            <% if(userPermissions.Values.hasOwnProperty("readcomments") || userPermissions.Values.hasOwnProperty("writecomments")){ %> 
+
+                <div class="buttons" style="position:static">
+                    <label for="comment-section-<%=index%>" class="show-comment-icon">
+                        <%- include('icons/comments'); -%> 
+                    </label>
+                </div>
+                <%- include('comments', {upload , index , userPermissions}); -%> 
+            <% } %>
+
+            
+                
+            </div>
+        <hr class="dotted-hr">
+<% }) %>

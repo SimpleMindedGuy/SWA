@@ -1,0 +1,18 @@
+<% if (User == undefined) { %>
+    <% if (settings.icon != "/icons/defult-user.svg") { %> 
+        <img src="/defaultimage/<%= settings.icon %>" alt="">
+    <%} else { %>
+        <img src="/icons/defult-user.svg" alt="">
+    <% } %>
+<%}else{ %>
+    <% if(!User.User_Image ) { %>
+        <% if (settings.icon != "/icons/defult-user.svg") { %> 
+<img src="/defaultimage/<%= settings.icon %>" alt="">
+        <%} else { %>
+<img src="/icons/defult-user.svg" alt="">
+        <% } %>
+    <% } else { %>
+<img src=<%=`/users/${User._id}/image/${User.User_Image}`%> alt="">
+    <% } %>
+
+<% } %>

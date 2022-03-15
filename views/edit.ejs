@@ -1,0 +1,255 @@
+<%- include('partials/page-header',{settings,owner,user}); -%> 
+<% let req = `/upload/${upload._id}?_method=PUT` %>
+    <% if(upload.Type == "project"){ %>
+        <div class="row">
+            <form enctype="multipart/form-data" method="POST" action=<%=req%>>
+                <input type="text" name="id"  value=<%=`${upload._id}`%> style="display: none;">
+        
+                <div class="input project-ui">
+                    <div>
+                        <p>project title</p>
+                        <textarea class="comment-input" name ="Project_title" oninput="ActiveTextarea(this)" onresize="ActiveTextarea(this)" ondragover="ActiveDropZone(this)" ondragleave="DeActiveDropZone(this)" ondrop="DropFile(this,event)"><%= typeof upload.Content.Title !='undefined' ? upload.Content.Title : ''   %></textarea>
+                        <p>project description</p>
+                        <textarea class="post-input" name ="Project_text" oninput="ActiveTextarea(this)" onresize="ActiveTextarea(this)" ondragover="ActiveDropZone(this)" ondragleave="DeActiveDropZone(this)" ondrop="DropFile(this,event)"><%= typeof upload.Content.Text !='undefined' ? upload.Content.Text : '' %></textarea>
+        
+                    </div>
+        
+                    <div>
+                        <p>project status</p>
+                        <div class="drop-list">
+                            <input id="option-list-1" type="checkbox">
+                            <label for="option-list-1" class="option-list">
+                                <p><%= typeof upload.Content.Status !='undefined' ? upload.Content.Status : 'Choose Status' %></p>
+                                <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                class="arrow">
+                                    <path 
+                                    inkscape:transform-center-x="-0.010131665"
+                                    inkscape:transform-center-y="-2.9884325"
+                                    d="M 22.5,19.465298 12.093831,14.621402 1.5,19.5 6.7348032,10.499998 11.969605,1.5 l 5.265197,8.982651 z"
+                                    sodipodi:nodetypes="ccccccc" />
+                                </svg>
+                            </label>
+                            <div class="option-menu" style="--amount : 4">
+                                <% if(upload.Content.Status == "Starting soon") { %> 
+                                    <input onchange="CloseOptionMenu(this);ChangeOption(this)" type="radio" name="Project_status" id="menu-1-option-1" value="Starting soon" checked=true >
+                                <% } else { %> 
+                                    <input onchange="CloseOptionMenu(this);ChangeOption(this)" type="radio" name="Project_status" id="menu-1-option-1" value="Starting soon" >
+                                <% }%>
+                                <label class="option"  style="--order : 1" for="menu-1-option-1"><p>Starting soon</p></label>
+        
+                                <% if(upload.Content.Status == "Work in progress"){ %> 
+                                    <input onchange="CloseOptionMenu(this);ChangeOption(this)" type="radio" name="Project_status" id="menu-1-option-2" value="Work in progress" checked=true >
+                                <% } else { %> 
+                                    <input onchange="CloseOptionMenu(this);ChangeOption(this)" type="radio" name="Project_status" id="menu-1-option-2" value="Work in progress" >
+                                <% } %>
+                                <label class="option"  style="--order : 1" for="menu-1-option-2"><p>Work in progress</p></label>
+
+                                <% if(upload.Content.Status == "Canceled") { %> 
+                                    <input onchange="CloseOptionMenu(this);ChangeOption(this)" type="radio" name="Project_status" id="menu-1-option-3" value="Canceled" checked=true >
+                                <% } else { %> 
+                                    <input onchange="CloseOptionMenu(this);ChangeOption(this)" type="radio" name="Project_status" id="menu-1-option-3" value="Canceled" >
+                                <% } %>
+                                <label class="option"  style="--order : 1" for="menu-1-option-3"><p>Canceled</p></label>
+        
+                                <% if(upload.Content.Status == "Done") { %> 
+                                    <input onchange="CloseOptionMenu(this);ChangeOption(this)" type="radio" name="Project_status" id="menu-1-option-4" value="Done" checked=true >
+                                <% } else { %>
+                                    <input onchange="CloseOptionMenu(this);ChangeOption(this)" type="radio" name="Project_status" id="menu-1-option-4" value="Done" >
+                                <% } %>
+                                <label class="option"  style="--order : 1" for="menu-1-option-4"><p>Done</p></label>
+        
+                            </div>
+                        </div>
+                        
+                        <p>Image (optional)</p>
+                        <input type="file" id="drop-zone" name="image"  onclick="ReadInputFiles(this)" onchange="InputFiles(this)">
+                        <div class="dropzone single" ondragover="ActiveDropZone(this)" ondragleave="DeActiveDropZone(this)" ondrop="DropFile(this,event)">
+
+                            <% if(upload.Content.images.length){ %>
+                                <% upload.Content.images.forEach((image)=>{ %> 
+                                    <div class="image">
+                                        <img src=<%=`/upload/${upload._id}/image/${image}` %> alt="">
+                                        <div class="image-blur">
+                                            <div class="cover"></div>
+                                            <label for=<%=`${image}` %> class="upload-remove" onclick="RemoveFile(this)">
+                                                <div class="x-line1"></div>
+                                                <div class="x-line2"></div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                <% }) %>
+                            <% } else{ %>
+                                <label  for="drop-zone">
+                                    <p class="note">drag and drop to add pictures</p>
+                                </label>
+
+                            <% } %>
+
+                        </div>
+                    </div>
+
+                    <% if(upload.Content.images.length){ %>
+                        <% upload.Content.images.forEach((image)=>{ %> 
+                            <input type="checkbox" name="delete_image" value=<%=`${image}` %> id=<%=`${image}` %> >
+                        <% }) %>
+                    <% } %>
+        
+                </div>
+                <div class="buttons">
+                    <input  type="submit" value="Post">
+                    <a href=<%=`/upload/${upload._id}/edit`%>  class="cancel-button" value="add image"> Reset</a>
+                </div>
+            </form>
+        </div>
+    <% } else if(upload.Type == "blog"){ %>
+        <div class="row">
+            <form enctype="multipart/form-data" method="POST" action=<%=req%>>
+                <input type="text" name="id"  value="<%=upload._id%>" style="display: none;">
+                <div class="input post-ui">
+                    
+                    <p>Blog title</p>
+                    <textarea class="comment-input" name ="Blog_title" oninput="ActiveTextarea(this)" onresize="ActiveTextarea(this)" ><%= typeof upload.Content.Title !='undefined' ? upload.Content.Title : '' %></textarea>
+                    <p>Blog description</p>
+                    <textarea  class="post-input" name ="Blog_text" oninput="ActiveTextarea(this)" onresize="ActiveTextarea(this)" ><%= typeof upload.Content.Text !='undefined' ? upload.Content.Text : '' %></textarea>
+                    <input id="file-1" type="file"name="images" onchange="InputFiles(this)" multiple>
+                    
+                    <div
+                    <% if(upload.Content.images.length){ %> 
+                        class="dropzone blogs-post active "
+                    <% } else { %>
+                        class="dropzone blogs-post"
+                    <% } %>
+                    class="dropzone" ondragover="ActiveDropZone(this)" ondragleave="DeActiveDropZone(this)" ondrop="DropFile(this,event)" >
+                        <% if(upload.Content.images.length){ %>
+                            <% upload.Content.images.forEach((image)=>{ %> 
+                                <div class="image">
+                                    <img src=<%=`/upload/${upload._id}/image/${image}` %> alt="">
+                                    <div class="image-blur">
+                                        <div class="cover"></div>
+                                        <label for=<%=`${image}` %> class="upload-remove" onclick="RemoveFile(this)">
+                                            <div class="x-line1"></div>
+                                            <div class="x-line2"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        <% } %>
+                    </div>
+                    <p class="note">drag and drop to add pictures</p>
+                    <% if(upload.Content.images.length){ %>
+                        <% upload.Content.images.forEach((image)=>{ %> 
+                            <input type="checkbox" name="delete_image" value=<%=`${image}` %> id=<%=`${image}` %> >
+                        <% }) %>
+                    <% } %>
+                </div>
+                </div>
+                <div class="buttons">
+                    <input type="submit" value="Post">
+                    <label for="file-1" type="button" class="cancel-button" value="add image"> Add image</label>
+                    <a href=<%=`/upload/${upload._id}/edit`%>  class="cancel-button" value="add image"> Reset</a>
+                </div>
+            </form>
+        </div>
+    <% } else if(upload.Type == "post") { %> 
+        <div class="row">
+            <form enctype="multipart/form-data" method="POST" action="<%=req%>">
+                <input type="text" name="id"  value=<%=`${upload._id}`%> style="display: none;">
+
+                <div class="input post-ui">
+                    <p>Post content</p>
+                    <textarea class="post-input" name ="Post_Content" oninput="ActiveTextarea(this)" onresize="ActiveTextarea(this)" ondragover="ActiveDropZone(this)" ondragleave="DeActiveDropZone(this)" ondrop="DropFile(this,event)"  >
+<%= typeof upload.Content.Text != 'undefined' ? upload.Content.Text : ''   %></textarea>
+
+                    <input name="images" type="file" id="file-input" onclick="ReadInputFiles(this)" onchange="InputFiles(this , event)" multiple>
+                    <div 
+                    <% if(upload.Content.images.length){ %> 
+                        class="dropzone active"
+                    <% } else { %>
+                        class="dropzone"
+                    <% } %>
+                    class="dropzone" ondragover="ActiveDropZone(this)" ondragleave="DeActiveDropZone(this)" ondrop="DropFile(this,event)" >
+                        <% if(upload.Content.images.length){ %>
+                            <% upload.Content.images.forEach((image)=>{ %> 
+                                <div class="image">
+                                    <img src=<%=`/upload/${upload._id}/image/${image}` %> alt="">
+                                    <div class="image-blur">
+                                        <div class="cover"></div>
+                                        <label for=<%=`${image}` %> class="upload-remove" onclick="RemoveFile(this)">
+                                            <div class="x-line1"></div>
+                                            <div class="x-line2"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        <% } %>
+                    </div>
+                    <p class="note">drag and drop to add pictures</p>
+                    <% if(upload.Content.images.length){ %>
+                        <% upload.Content.images.forEach((image)=>{ %> 
+                            <input type="checkbox" name="delete_image" value=<%=`${image}` %> id=<%=`${image}` %> >
+                        <% }) %>
+                    <% } %>
+                    
+                </div>
+                <div class="buttons">
+                    <input  type="submit" value="Post">
+                    <label for="file-input"  class="cancel-button" value="add image"> Add image</label>
+                    <a href=<%=`/upload/${upload._id}/edit`%>  class="cancel-button" value="add image"> Reset</a>
+                </div>
+            </form>
+        </div>
+    <% } else if(upload.Type == "comment") {%> 
+        <% let req = `/comment/${upload._id}?_method=PUT` %>
+
+        <form enctype="multipart/form-data" method="POST" action=<%=req %>>
+            <input type="text" name="id"  value=<%=`${upload._id}`%> style="display: none;">
+
+            <div class="input comment-ui">
+                <% if (user == undefined) { %>
+                    <%- include("User-image",{user, User : user ,settings})-%> 
+                <%}else{ %>
+                    <a href=<%=`/users/${upload.User._id}`%> >
+                        <%- include("User-image",{user, User : user ,settings})-%> 
+                    </a>
+                <% } %>
+
+                <textarea class="comment-input" name="Comment_Text" oninput="ActiveTextarea(this)" onresize="ActiveTextarea(this)" ondragover="ActiveDropZone(this)" ondragleave="DeActiveDropZone(this)" ondrop="DropFile(this,event)" ><%= typeof upload.Content.Text != 'undefined' ? upload.Content.Text : ''   %></textarea>
+
+                <div></div>
+                <div></div>
+                <input name="image" type="file" id="file-input" onclick="ReadInputFiles(this)" onchange="InputFiles(this , event)" >
+                <div 
+                <% if(upload.Content.images.length){ %> 
+                    class="dropzone one active"
+                <% } else { %>
+                    class="dropzone one"
+                <% } %>
+                class="dropzone" ondragover="ActiveDropZone(this)" ondragleave="DeActiveDropZone(this)" ondrop="DropFile(this,event)" >
+                    <% if(upload.Content.images.length){ %>
+                        <% upload.Content.images.forEach((image)=>{ %> 
+                            <div class="image">
+                                <img src=<%=`/upload/${upload._id}/image/${image}` %> alt="">
+                                <div class="image-blur">
+                                    <div class="cover"></div>
+                                    <label for=<%=`${image}` %> class="upload-remove" onclick="RemoveFile(this)">
+                                        <div class="x-line1"></div>
+                                        <div class="x-line2"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        <% }) %>
+                    <% } %>
+                </div>
+                <div></div>
+            </div>
+            <div class="buttons">
+                <input  type="submit" value="Post">
+                <label for="file-input" type="button" class="cancel-button" value="add image"> Add image</label>
+            </div>
+        </form>
+    <% }%>
+
+    <script src="/js/uncheckall.js" ></script>
+<%- include('partials/page-footer'); -%>

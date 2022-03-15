@@ -1,0 +1,33 @@
+<%- include('partials/page-header' ,{settings,owner,user}); -%> 
+
+    <% if(userPermissions.Values.hasOwnProperty("writeposts") && !settings.options.includes("Personal_Website")) {%> 
+        <%- include('partials/post-form', {req:"/posts",nextid}); -%> 
+    <%}%>
+
+<div class="row">
+    <h1>Hello world</h1>
+    <p>
+        welcome to my website . this is just the design for my personal website project its also going to work as the design for my social media project , if you want to know about me . click on Simple Minded , or <a href="#">click here</a>. 
+
+        the other pages on the navigation bar also well take you to deferent pages with some stuff i added to this website . 
+
+        you can also switch themes , and it should remember what theme you chosen across all website pages.
+        all animations in this website and menus are functioning through Css expect for (drag and drop) functions and theme switching.
+        enjoy.
+    </p>
+    <h6>Note :</h6>
+    <p>there is a <b>blur</b> effect on this website, its disabled by default on <b>Firefox</b>.
+        to enable it :</p>
+    <ul>
+        <li>in the search bar type : about:config</li>
+        <li>click on accept Risk and Continue</li>
+        <li>search for : backdrop-filter</li>
+        <li>change the value to true</li>
+    </ul>
+</div>
+<hr>
+
+
+<%- include('partials/all-uploads',{uploads,user,userPermissions}) -%>
+
+<%- include('partials/page-footer'); -%>

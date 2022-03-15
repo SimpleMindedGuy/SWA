@@ -1,0 +1,19 @@
+<div class="row">
+    <form enctype="multipart/form-data" method="POST" action="<%=req%>">
+        <input type="text" name="id"  value="<%=nextid%>" style="display: none;">
+        <div class="input post-ui">
+            <p>Post content</p>
+            <textarea class="post-input" name ="Post_Content" oninput="ActiveTextarea(this)" onresize="ActiveTextarea(this)" ondragover="ActiveDropZone(this)" ondragleave="DeActiveDropZone(this)" ondrop="DropFile(this,event)"></textarea>
+
+            <input name="images" type="file" id="file-input" onclick="ReadInputFiles(this)" onchange="InputFiles(this , event)" multiple>
+            <div class="dropzone" ondragover="ActiveDropZone(this)" ondragleave="DeActiveDropZone(this)" ondrop="DropFile(this,event)">
+            </div>
+            <p class="note">drag and drop to add pictures</p>
+
+        </div>
+        <div class="buttons">
+            <input  type="submit" value="Post">
+            <label for="file-input" type="button" class="cancel-button" value="add image"> Add image</label>
+        </div>
+    </form>
+</div>

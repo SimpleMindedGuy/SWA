@@ -1,0 +1,55 @@
+<input id=<%=`${input_id}`%> type="checkbox" unchecked>
+<div class="pop-up">
+    <div class="input post-ui">
+
+        <form method="POST" enctype="multipart/form-data" action=<%=`${req}`%>>
+
+            <p>Edit Post</p>
+
+            <label class="burger" style="display: grid;" for=<%=`${input_id}`%> >
+                <div class="line1 active"></div>
+                <div class="line2 active" style="opacity: 0;"></div>
+                <div class="line3 active"></div>
+            </label>
+
+
+                <p>Post content</p>
+                <textarea class="post-input" name ="Post_Content" oninput="ActiveTextarea(this)" onresize="ActiveTextarea(this)" ondragover="ActiveDropZone(this)" ondragleave="DeActiveDropZone(this)" ondrop="DropFile(this,event)" ><%= typeof upload.Content.Text !='undefined' ? upload.Content.Text : '' %></textarea>
+
+                <input name="images" type="file" id=<%=image_id %> onclick="ReadInputFiles(this)" onchange="InputFiles(this , event)" multiple>
+                
+<% if(upload.Content.images){ %>
+<div class="dropzone active" ondragover="ActiveDropZone(this)" ondragleave="DeActiveDropZone(this)" ondrop="DropFile(this,event)">
+<% upload.Content.images.forEach((image)=>{ %>
+    <div class="image">
+        <img src=<%=`/${upload.Type}s/${upload._id}/image/${image}`%> alt="">
+        <div class="image-blur">
+            <div class="cover"></div>
+
+            <label for=<%=image%> class="upload-remove" onclick="RemoveFile(this)">
+                <div class="x-line1"></div>
+                <div class="x-line2"></div>
+            </label>
+
+        </div>
+    </div>
+
+<% })} %>
+</div>
+
+<% if(upload.Content.images){ %>
+    <% upload.Content.images.forEach((image)=>{ %>
+        <input  unchecked type="checkbox" name="<%=image%>" id="<%=image%>" style="display: block;">
+<% })} %>
+
+
+            <p class="note">drag and drop to add pictures</p>
+            <div class="buttons" style="top:0px;">
+                <input  type="submit" value="Post">
+                <label for=<%=image_id %> type="button" class="cancel-button" value="add image"> Add image</label>
+            </div>
+
+        </form>
+            
+    </div>
+</div>
