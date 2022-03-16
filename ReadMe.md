@@ -43,7 +43,7 @@ The server will start and try to connect to the database.
 And it should be ready to use once it connects to the database
 
 ### note
-This is still first “release”, so I don't expect it to work everywhere, if you have any notes you can [email me here](syn-97@hotmail.com).
+This is still first “release”, so I don't expect it to work everywhere
 
 you can also view the design on [this link](https://simplemindedguy.github.io/Personal-website-design/)
 
