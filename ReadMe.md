@@ -50,6 +50,5 @@ you can also view the design on [this link](https://simplemindedguy.github.io/Pe
 ## todo
 - [ ] refactor the whole web app
 - [ ] refactor the design
-- [ ] implement Ajax
-- [ ] re work mobile view
+- [ ] re work mobile design
 - [ ] build the front end using Vue js
