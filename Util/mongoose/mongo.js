@@ -5,7 +5,6 @@ mongoose.Promise = Promise;
 
 const mongoPath = process.env.SimpleWSMongoURI;
 
-// const mongoPath = require("../../config/keys").MongoURI;
 
 const appFunctions = require("../../app")
 
@@ -166,7 +165,9 @@ async function CreateActAndRec(DBs)
     }
     console.log(`\n\nCreating Essential resources\n`)
     for (const Rec of Act_Rec.Resources) {
-        if (! await Permissions.CreateResource(Rec,Def_Act_Rec_Description.Resources[Rec]))
+        console.log(Def_Act_Rec_Description.Resources[Rec])
+        console.log(Rec)
+        if (! await Permissions.CreateResource(Rec,`${Def_Act_Rec_Description.Resources[Rec]}`))
         {
             console.log(`Something went wrong while adding Action : ${Rec} `);
             console.log(`false at CreateActAndRec`);

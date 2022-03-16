@@ -6,6 +6,7 @@ html,body
     background: var(--body-background-color);
     transition: all 0.5s ease;
     overflow-x: hidden;
+    height:  100%;
 }
 
 *{
@@ -371,9 +372,8 @@ a.cancel-button:visited
     color: var(--normal-text-color);
 }
 
-.warning-button, .accept-button{
+input[type="submit"].warning-button, .warning-button, .accept-button{
     min-width: 0;
-    padding: var(--padding);
     background-color: var(--border-warning-color);
 }
 
@@ -381,6 +381,10 @@ a.cancel-button:visited
     background-color: var(--title-color);
 }
 
+input[type="submit"]:hover.warning-button
+{
+    background-color: var(--border-warning-color);
+}
 input[type="button"]:hover,button:hover,input[type="submit"]:hover
 {
     background-color: var(--border-hover);
@@ -445,6 +449,11 @@ img
     grid-auto-flow : column;
 }
 
+.nav-bar-icons .edit-icon ,.nav-bar-icons .warning-icons
+{
+    width: calc(var(--icon-size) * 1.4);
+    height: calc(var(--icon-size)* 1.4);
+}
 
 .logo
 {
@@ -575,10 +584,10 @@ input[type="checkbox"]:checked + label.burger  > .line3 ,.line3.active
 .page
 {
     width: 100%;
-    display:flex;
+    display:grid;
     position: relative;
     z-index: 3;
-    align-items: center;
+    align-items: start;
     flex-direction: column;
     padding-top:  calc(var(--nav-bar-height) + 10px);
     /* padding-top : 10px; */
@@ -1974,7 +1983,7 @@ input[type="checkbox"]:checked+.success-msg.form
 
 input[type="checkbox"]:checked + .pop-up
 {
-    display: block;
+    display: grid;
 }
 
 .pop-up > .input
@@ -2298,7 +2307,7 @@ input[type="radio"]:checked + .group-list-slide, .group-list-slide.active
     place-self: start;
 }
 
-.permissions  label , .add-remove-delete-option{
+.permissions > label , .add-remove-delete-option{
     cursor: pointer;
     padding : calc(var(--padding) / 2) ; 
     border-radius: var(--border-radius);
@@ -2308,6 +2317,17 @@ input[type="radio"]:checked + .group-list-slide, .group-list-slide.active
     height: fit-content;
     place-self: center;
     gap: calc(var(--gap) * 2);
+}
+
+
+input[type="checkbox"]:disabled + .permissions > p 
+{
+    color: var(--cancel-button-hover-color);
+    opacity: 0.5;
+}
+input[type="checkbox"]:disabled + .permissions > label
+{
+    opacity: 0.5;
 }
 
 .add-remove-delete-option
@@ -2330,7 +2350,8 @@ input[type="radio"]:checked + label
 }
 
 
-.permissions > input[type="checkbox"]:checked + label{
+input[type="checkbox"]:checked + .permissions > label
+{
     background-color: var(--title-color);
 }
 
@@ -2352,8 +2373,8 @@ input[type="radio"]:checked + label
 }
 .icon-button > svg, .edit-icon , .warning-icons
 {
-    height: 25px;
-    width: 25px;
+    height: var(--icon-size);
+    width: var(--icon-size);
     fill : var(--normal-text-color);
     stroke : var(--normal-text-color);
     cursor: pointer;

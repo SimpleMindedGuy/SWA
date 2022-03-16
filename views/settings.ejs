@@ -55,9 +55,9 @@
                         
                         <% if(item == "icon"){ %>
                             <div>
-                                <input type="checkbox" name="removeicon" id="removeicon">
+                                <input type="checkbox" name="removeimage" id="removeimage">
                                 <input type="file" name="image" id="<%= item %>" onclick="ReadInputFiles(this)" onchange="InputFiles(this , event)" >
-                                <div class="dropzone single removeicon" ondragover="ActiveDropZone(this)" ondragleave="DeActiveDropZone(this)" ondrop="DropFile(this,event)">
+                                <div class="dropzone single removeimage" ondragover="ActiveDropZone(this)" ondragleave="DeActiveDropZone(this)" ondrop="DropFile(this,event)">
             
                                     <div class="image">
                                         <% if(settings.icon == "/icons/defult-user.svg") { %> 
@@ -68,7 +68,7 @@
                                         <div class="image-blur">
                                             <div class="cover"></div>
                     
-                                            <label class="upload-remove" onclick="RemoveFile(this)" for="removeicon">
+                                            <label class="upload-remove" onclick="RemoveFile(this)" for="removeimage">
                                                 <div class="x-line1"></div>
                                                 <div class="x-line2"></div>
                                             </label>

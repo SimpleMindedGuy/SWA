@@ -40,7 +40,7 @@ router.get("/",getUserPermissions,async (req,res) =>
     const Rec = await Permissions.GetAllResources();
     const groups = await UserGroups.GetAllUserGroups();
     // console.log(userPermissions)
-    res.render("permission",{title:title,user:user,groups,userPermissions,Act,Rec,Def_Role,owner});
+    res.render("permission",{title:title,user:user,groups,userPermissions,Act,Rec,Def_Role,owner,settings});
 })
 
 router.put("/",getUserPermissions,async(req,res)=>{
@@ -59,7 +59,7 @@ router.post("/",getUserPermissions,async(req,res)=>{
     // console.log(req.body)
     if(userPermissions.Values.hasOwnProperty("writeroles"))
     {
-        const Role = TEXT.RemoveWhiteSpace(req.body.Group_Name)
+        const Role = await TEXT.RemoveWhiteSpace(req.body.Group_Name)
         // console.log(Role)
         if(! await TEXT.ValidateUserName(Role))
         {
@@ -122,7 +122,9 @@ router.put("/:Group_Name",getUserPermissions,UploadFiles.UploadMiddleware,async(
     let acts = [];
     let recs =[];
 
-    console.log(req.body)
+    // console.log(req.body)
+
+    // console.log(userPermissions)
 
     const grp = await UserGroups.GetUserGroup(req.params.Group_Name)
 
@@ -143,8 +145,8 @@ router.put("/:Group_Name",getUserPermissions,UploadFiles.UploadMiddleware,async(
 
         if(Array.isArray(req.body.Resources))
         {
-            req.body.Resources.forEach((Recs)=>{
-                if(userPermissions.Act.includes(Rec))
+            req.body.Resources.forEach((Rec)=>{
+                if(userPermissions.Rec.includes(Rec))
                     recs.push(Rec)
             })
         }
@@ -154,8 +156,8 @@ router.put("/:Group_Name",getUserPermissions,UploadFiles.UploadMiddleware,async(
                 recs.push(req.body.Resources)
         }
 
-        UserGroups.setGroupActions(req.params.Group_Name,req.body.Actions)
-        UserGroups.setGroupResources(req.params.Group_Name,req.body.Resources)
+        UserGroups.setGroupActions(req.params.Group_Name,acts)
+        UserGroups.setGroupResources(req.params.Group_Name,recs)
     }
     else
     {

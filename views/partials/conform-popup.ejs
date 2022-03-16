@@ -1,0 +1,11 @@
+<input id=<%=`${input_id}`%> type="checkbox" unchecked>
+<div class="pop-up">
+    
+    <div class="input post-ui" >
+        <form method="POST" action=<%=`${req}`%>   style="display: flex;gap: 5px;place-self: center; justify-content: space-between;"  >
+        <h3><%= message %></h3>
+            <input type="submit" value="Delete User" class="warning-button">
+            <label for=<%=`${input_id}`%> class="cancel-button">Cancel</label>
+        </form>
+    </div>
+</div>

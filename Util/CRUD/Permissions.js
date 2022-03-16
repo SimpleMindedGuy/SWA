@@ -29,8 +29,8 @@ module.exports.GetAction = GetAction;
 
 async function CreateAction(act,desc)
 {
-    console.log(act)
-    console.log(desc)
+    // console.log(act)
+    // console.log(desc)
     const Act = new ActionSchema({
         Action : act,
         Action_Description : desc,

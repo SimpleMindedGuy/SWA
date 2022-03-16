@@ -498,13 +498,9 @@ async function GetAllUploads()
 }
 module.exports.GetAllUploads = GetAllUploads;
 
-async function GetAllUploadsDescending()
+async function GetAllUploadsDescending(resources)
 {
-    const Uploads = await UploadSchema.find({},{},{
-        sort:{
-            "Upload_Date" : -1,
-        }
-    })
+    const Uploads = await UploadSchema.find()
     .populate("User")
     .populate({
             path: 'Comments',
@@ -515,6 +511,7 @@ async function GetAllUploadsDescending()
         path: 'Sub_Upload',
         populate : {
             path : "Comments",
+            options: { sort: ['-Upload_Date'] },
             populate:{
                 path:"User"
             }
@@ -558,6 +555,7 @@ async function GetAllUploadsDescendingOfType(type)
         path: 'Sub_Upload',
         populate : {
             path : "Comments",
+            options: { sort: ['-Upload_Date'] },
             populate:{
                 path:"User"
             }
@@ -621,6 +619,13 @@ async function GetUploadById(upload_id)
             path : "User" 
         }
     })
+    .then((uploads)=>{
+        return uploads
+    })
+    .catch((err)=>{
+        console.log(err)
+        return undefined
+    })
     return Upload
 }
 module.exports.GetUploadById = GetUploadById;
@@ -646,7 +651,385 @@ async function GetCommentById(comment_id)
         }
     })
     .populate("User")
+    .then((uploads)=>{
+        return uploads
+    })
+    .catch((err)=>{
+        console.log(err)
+        return undefined
+    })
 
     return Comment
 }
 module.exports.GetCommentById = GetCommentById;
+
+
+async function GetUploadsLastUpdated()
+{
+    const Uploads = await UploadSchema.find()
+    .sort({Modified_Date: -1})
+    .populate("User")
+    .populate({
+            path: 'Comments',
+            options: { sort: ['-Upload_Date'] },
+            populate : {path : "User" }
+    })
+    .populate({
+        path: 'Sub_Upload',
+        populate : {
+            path : "Comments",
+            options: { sort: ['-Upload_Date'] },
+            populate:{
+                path:"User"
+            }
+        }
+    })
+    .populate({
+        path: 'Sub_Upload',
+        populate : {
+            path : "User",
+        }
+    })
+    .populate({
+        path: 'Parent_Upload', 
+        populate : {
+            path : "User" 
+        }
+    })
+    .then((uploads)=>{
+        return uploads
+    })
+    .catch((err)=>{
+        console.log(err)
+        return undefined
+    })
+    // .populate({
+    //     path: 'Parent_Upload', 
+    //     populate : {
+    //         path : "Comments",
+    //         options: { sort: ['-Upload_Date'] }
+    //     }
+    // })
+
+    return Uploads
+}
+module.exports.GetUploadsLastUpdated = GetUploadsLastUpdated;
+
+async function GetUploadsLastUpdatedOfType(type)
+{
+    const Uploads = await UploadSchema.find({Type : type})
+    .sort({Modified_Date: -1})
+    .populate("User")
+    .populate({
+            path: 'Comments',
+            options: { sort: ['-Upload_Date'] },
+            populate : {path : "User" }
+    })
+    .populate({
+        path: 'Sub_Upload',
+        populate : {
+            path : "Comments",
+            options: { sort: ['-Upload_Date'] },
+            populate:{
+                path:"User"
+            }
+        }
+    })
+    .populate({
+        path: 'Sub_Upload',
+        populate : {
+            path : "User",
+        }
+    })
+    .populate({
+        path: 'Parent_Upload', 
+        populate : {
+            path : "User" 
+        }
+    })
+    .then((uploads)=>{
+        return uploads
+    })
+    .catch((err)=>{
+        console.log(err)
+        return undefined
+    })
+    // .populate({
+    //     path: 'Parent_Upload', 
+    //     populate : {
+    //         path : "Comments",
+    //         options: { sort: ['-Upload_Date'] }
+    //     }
+    // })
+
+    return Uploads
+}
+module.exports.GetUploadsLastUpdatedOfType = GetUploadsLastUpdatedOfType;
+
+async function GetAnonUploadsLastUpdatedOfType(type) 
+{
+    const Uploads = await UploadSchema.find({User : undefined,Type : type})
+    .sort({Modified_Date: -1})
+    .populate("User")
+    .populate({
+            path: 'Comments',
+            options: { sort: ['-Upload_Date'] },
+            populate : {path : "User" }
+    })
+    .populate({
+        path: 'Sub_Upload',
+        populate : {
+            path : "Comments",
+            options: { sort: ['-Upload_Date'] },
+            populate:{
+                path:"User"
+            }
+        }
+    })
+    .populate({
+        path: 'Sub_Upload',
+        populate : {
+            path : "User",
+        }
+    })
+    .populate({
+        path: 'Parent_Upload', 
+        populate : {
+            path : "User" 
+        }
+    })
+    .then((uploads)=>{
+        return uploads
+    })
+    .catch((err)=>{
+        console.log(err)
+        return undefined
+    })
+    // .populate({
+    //     path: 'Parent_Upload', 
+    //     populate : {
+    //         path : "Comments",
+    //         options: { sort: ['-Upload_Date'] }
+    //     }
+    // })
+
+    return Uploads
+}
+module.exports.GetAnonUploadsLastUpdatedOfType = GetAnonUploadsLastUpdatedOfType;
+
+async function GetAnonUploadsLastUpdated()
+{
+    const Uploads = await UploadSchema.find({User : undefined})
+    .sort({Modified_Date: -1})
+    .populate("User")
+    .populate({
+            path: 'Comments',
+            options: { sort: ['-Upload_Date'] },
+            populate : {path : "User" }
+    })
+    .populate({
+        path: 'Sub_Upload',
+        populate : {
+            path : "Comments",
+            options: { sort: ['-Upload_Date'] },
+            populate:{
+                path:"User"
+            }
+        }
+    })
+    .populate({
+        path: 'Sub_Upload',
+        populate : {
+            path : "User",
+        }
+    })
+    .populate({
+        path: 'Parent_Upload', 
+        populate : {
+            path : "User" 
+        }
+    })
+    .then((uploads)=>{
+        return uploads
+    })
+    .catch((err)=>{
+        console.log(err)
+        return undefined
+    })
+    // .populate({
+    //     path: 'Parent_Upload', 
+    //     populate : {
+    //         path : "Comments",
+    //         options: { sort: ['-Upload_Date'] }
+    //     }
+    // })
+
+    return Uploads
+}
+module.exports.GetAnonUploadsLastUpdated = GetAnonUploadsLastUpdated;
+
+async function GetAnonUploadsLastUpdatedResourceFiltered(resources=[])
+{
+    if(resources.length == 0)
+    {
+        return undefined
+    }
+    const Uploads = await UploadSchema.find({User : undefined,Type : { $in : resources } })
+    .sort({Modified_Date: -1})
+    .populate("User")
+    .populate({
+            path: 'Comments',
+            options: { sort: ['-Upload_Date'] },
+            populate : {path : "User" }
+    })
+    .populate({
+        path: 'Sub_Upload',
+        populate : {
+            path : "Comments",
+            options: { sort: ['-Upload_Date'] },
+            populate:{
+                path:"User"
+            }
+        }
+    })
+    .populate({
+        path: 'Sub_Upload',
+        populate : {
+            path : "User",
+        }
+    })
+    .populate({
+        path: 'Parent_Upload', 
+        populate : {
+            path : "User" 
+        }
+    })
+    .then((uploads)=>{
+        return uploads
+    })
+    .catch((err)=>{
+        console.log(err)
+        return undefined
+    })
+    // .populate({
+    //     path: 'Parent_Upload', 
+    //     populate : {
+    //         path : "Comments",
+    //         options: { sort: ['-Upload_Date'] }
+    //     }
+    // })
+
+    return Uploads
+}
+module.exports.GetAnonUploadsLastUpdatedResourceFiltered = GetAnonUploadsLastUpdatedResourceFiltered;
+
+async function GetUploadsLastUpdatedResourceFiltered(resources=[])
+{
+    if(resources.length == 0)
+    {
+        return undefined
+    }
+    else
+    {
+
+        const Uploads = await UploadSchema.find({Type : { $in : resources } })
+        .sort({Modified_Date: -1})
+        .populate("User")
+        .populate({
+                path: 'Comments',
+                options: { sort: ['-Upload_Date'] },
+                populate : {path : "User" }
+        })
+        .populate({
+            path: 'Sub_Upload',
+            populate : {
+                path : "Comments",
+                options: { sort: ['-Upload_Date'] },
+                populate:{
+                    path:"User"
+                }
+            }
+        })
+        .populate({
+            path: 'Sub_Upload',
+            populate : {
+                path : "User",
+            }
+        })
+        .populate({
+            path: 'Parent_Upload', 
+            populate : {
+                path : "User" 
+            }
+        })
+        .then((uploads)=>{
+            return uploads
+        })
+        .catch((err)=>{
+            console.log(err)
+            return undefined
+        })
+        // .populate({
+        //     path: 'Parent_Upload', 
+        //     populate : {
+        //         path : "Comments",
+        //         options: { sort: ['-Upload_Date'] }
+        //     }
+        // })
+    
+        return Uploads
+    }
+}
+module.exports.GetUploadsLastUpdatedResourceFiltered = GetUploadsLastUpdatedResourceFiltered;
+
+
+async function GetUserUploadsLastUpdatedResourceFiltered(user_id,resources)
+{
+    const Uploads = await UploadSchema.find({User : mongoose.Types.ObjectId( user_id) ,Type : { $in : resources } })
+    .sort({Modified_Date: -1})
+    .populate("User")
+    .populate({
+            path: 'Comments',
+            options: { sort: ['-Upload_Date'] },
+            populate : {path : "User" }
+    })
+    .populate({
+        path: 'Sub_Upload',
+        populate : {
+            path : "Comments",
+            options: { sort: ['-Upload_Date'] },
+            populate:{
+                path:"User"
+            }
+        }
+    })
+    .populate({
+        path: 'Sub_Upload',
+        populate : {
+            path : "User",
+        }
+    })
+    .populate({
+        path: 'Parent_Upload', 
+        populate : {
+            path : "User" 
+        }
+    })
+    .then((uploads)=>{
+        return uploads
+    })
+    .catch((err)=>{
+        console.log(err)
+        return undefined
+    })
+    // .populate({
+    //     path: 'Parent_Upload', 
+    //     populate : {
+    //         path : "Comments",
+    //         options: { sort: ['-Upload_Date'] }
+    //     }
+    // })
+
+    return Uploads
+}
+module.exports.GetUserUploadsLastUpdatedResourceFiltered = GetUserUploadsLastUpdatedResourceFiltered;

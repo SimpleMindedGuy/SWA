@@ -9,11 +9,11 @@ A simple website "solution" for a personal or community website.
 
 
 ### Configuration:
-***port***
+port :
 By default, the app will host itself on port (6254)
 to change the port 
 
-***Database***
+Database :
 To connect your server to your database, you need to add an environment variable (SimpleWSMongoURI)
 
 

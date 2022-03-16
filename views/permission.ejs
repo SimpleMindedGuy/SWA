@@ -6,7 +6,7 @@
 
     <div style="width: 100%;">
 
-        <% if(userPermissions.Values.hasOwnProperty('writeroles')) { %> 
+        <% if(userPermissions.Values.hasOwnProperty('writeroles') ) { %> 
             <form method="POST" action="/usergroups" class="row ordered-list-container">
                 <div class="ordered-list-element-form">
                     <div>
@@ -37,7 +37,7 @@
                         <p style="place-self: center;"><%=groups[i].Group_Name%></p>
                     </div>
                     <div>
-                        <p style="place-self: center;">Members : </p>
+                        <p style="place-self: center;">Members : <%= groups[i].Group_Members.length %> </p>
                     </div>
                     <div class="list-element-edit">
                         
@@ -69,7 +69,7 @@
                             <p style="place-self: center;"><%=groups[i].Group_Name%></p>
                         </div>
                         <div>
-                            <p style="place-self: center;">Members : </p>
+                            <p style="place-self: center;">Members : <%= groups[i].Group_Members.length %> </p>
                         </div>
                         <div class="list-element-edit">
                             <div class="element-edit">
@@ -122,10 +122,15 @@
                     <p style="place-self: center;"><%=groups[groups.length-1].Group_Name%></p>
                 </div>
                 <div>
-                    <p style="place-self: center;">Members : </p>
+                    <p style="place-self: center;">Members : <%= groups[groups.length-1].Group_Members.length %> </p>
                 </div>
                 <div class="list-element-edit">
-                    
+                    <div class="element-edit">
+                        
+                        <label class="burger"style="display: grid;" for="<%= groups[groups.length-1].Group_Name %>">
+                            <%- include('partials/icons/gear'); -%> 
+                        </label>
+                    </div>
                     <p><%= groups.length-1 %></p>
                 </div>
             </div>
@@ -141,7 +146,7 @@
                         <p style="place-self: center;"><%=group.Group_Name%></p>
                     </div>
                     <div>
-                        <p style="place-self: center;">Members : </p>
+                        <p style="place-self: center;">Members : <%= group.Group_Members.length %> </p>
                     </div>
                     <div class="list-element-edit">
                         
@@ -173,29 +178,30 @@
                 
                 <div class="row">
                     <% Act.forEach((act,index)=>{ %>
+                        <% if(groups[i].Group_Actions.includes(act.Action) ) { %> 
+                                
+                            <% if(userPermissions.Act.includes(`${act.Action}`) ) { %> 
+                                <input type="checkbox" checked name="Actions" id=<%=`${i}${act.Action}`%> value=<%= `${act.Action}` %> >
+                            <%} else { %> 
+                                <input type="checkbox" checked disabled name="Actions" id=<%=`${i}${act.Action}`%> value=<%= `${act.Action}` %> >
+                            <% } %>
+
+                        <% } else { %>
+                            
+                            <% if(userPermissions.Act.includes(`${act.Action}`)) { %> 
+                                <input type="checkbox" unchecked name="Actions" id=<%=`${i}${act.Action}`%> value=<%= `${act.Action}` %> >
+                            <%} else { %> 
+                                <input type="checkbox" unchecked disabled name="Actions" id=<%=`${i}${act.Action}`%> value=<%= `${act.Action}` %> >
+                            <% } %>
+
+                        <% } %>
+
                         <div class="permissions">
  
                             <p>
                                 <%= act.Action_Description %>
                             </p>
         
-                            <% if(groups[i].Group_Actions.includes(act.Action) ) { %> 
-                                
-                                <% if(userPermissions.Act.hasOwnProperty(`${act.Action}`) ) { %> 
-                                    <input type="checkbox" checked name="Actions" id=<%=`${i}${act.Action}`%> value=<%= `${act.Action}` %> >
-                                <%} else { %> 
-                                    <input type="checkbox" checked disabled name="Actions" id=<%=`${i}${act.Action}`%> value=<%= `${act.Action}` %> >
-                                <% } %>
-
-                            <% } else { %>
-                                
-                                <% if(userPermissions.Act.hasOwnProperty(`${act.Action}`)) { %> 
-                                    <input type="checkbox" unchecked name="Actions" id=<%=`${i}${act.Action}`%> value=<%= `${act.Action}` %> >
-                                <%} else { %> 
-                                    <input type="checkbox" unchecked disabled name="Actions" id=<%=`${i}${act.Action}`%> value=<%= `${act.Action}` %> >
-                                <% } %>
-
-                            <% } %>
                             <label class="permission" for=<%=`${i}${act.Action}`%> name=<%=`${act.Action}`%> >
                                 <p><%= `${act.Action}` %></p>
                             </label>    
@@ -214,24 +220,25 @@
 
                 <div class="row">
                 <% Rec.forEach((rec,index)=>{ %>
-                    <div class="permissions">
-                        <p> <%=`${rec.Resource_Description}`%> </p>
-                        <% if(groups[i].Group_Resources.includes(rec.Resource) ) { %> 
+                    <% if(groups[i].Group_Resources.includes(rec.Resource) ) { %> 
                             
-                            <% if(userPermissions.Rec.hasOwnProperty(`${rec.Resource}`) ) { %> 
-                                <input type="checkbox" checked  name=Resources id=<%=`${i}${rec.Resource}`%> value=<%= `${rec.Resource}` %>>
-                            <% } else { %> 
-                                <input type="checkbox" checked disabled name=Resources id=<%=`${i}${rec.Resource}`%> value=<%= `${rec.Resource}` %>>
-                            <% } %>
-                        <% } else { %>
+                        <% if(userPermissions.Rec.includes(`${rec.Resource}`) ) { %> 
+                            <input type="checkbox" checked  name=Resources id=<%=`${i}${rec.Resource}`%> value=<%= `${rec.Resource}` %>>
+                        <% } else { %> 
+                            <input type="checkbox" checked disabled name=Resources id=<%=`${i}${rec.Resource}`%> value=<%= `${rec.Resource}` %>>
+                        <% } %>
+                    <% } else { %>
 
-                            <% if(userPermissions.Rec.hasOwnProperty(`${rec.Resource}`) ) { %> 
-                                <input type="checkbox" unchecked  name=Resources id=<%=`${i}${rec.Resource}`%> value=<%= `${rec.Resource}` %>>
-                            <% } else { %> 
-                                <input type="checkbox" unchecked disabled name=Resources id=<%=`${i}${rec.Resource}`%> value=<%= `${rec.Resource}` %>>
-                            <% } %>
-                        <% } %>  
-                            <label class="permission" for=<%=`${i}${rec.Resource}`%> name=<%=`${rec}`%> >
+                        <% if(userPermissions.Rec.includes(`${rec.Resource}`) ) { %> 
+                            <input type="checkbox" unchecked  name=Resources id=<%=`${i}${rec.Resource}`%> value=<%= `${rec.Resource}` %>>
+                        <% } else { %> 
+                            <input type="checkbox" unchecked disabled name=Resources id=<%=`${i}${rec.Resource}`%> value=<%= `${rec.Resource}` %>>
+                        <% } %>
+                    <% } %>  
+                    <div class="permissions">
+                        <p> <%=rec.Resource_Description %> </p>
+                        
+                            <label class="permission" for=<%=`${i}${rec.Resource}`%> name=<%=`${rec.Resource}`%> >
                                 <p><%= rec.Resource %></p>
                             </label>
                     </div>

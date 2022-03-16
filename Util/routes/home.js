@@ -36,9 +36,8 @@ router.get("/home",checkSetupUser,getUserPermissions,async (req,res) =>
     const owner = await Users.GetOwner()
     const settings = await Settings.getSettings();
 
-    // console.log(owner)
-
-    let uploads = await upload.GetAllUploadsDescending();
+    let uploads = await upload.GetUploadsLastUpdatedResourceFiltered(userPermissions.Rec);
+    
     let nextid =await  mongoose.Types.ObjectId();
     res.render("home",{
         title:title,
@@ -59,21 +58,54 @@ router.get("/projects",getUserPermissions,async (req,res) =>
     const user = await typeof req.user !='undefined' ? await res.locals.User : undefined;
     const userPermissions = res.locals.Permissions;
     const owner = await Users.GetOwner()
-
     const settings = await Settings.getSettings();
 
-    let uploads = await upload.GetAllUploadsDescendingOfType("project");
+    let uploads
 
+    if (userPermissions.Values.hasOwnProperty("readprojects"))
+    {
+        uploads = await upload.GetUploadsLastUpdatedResourceFiltered(["project"])
+        res.render("projects",{
+            title:title,
+            user:user,
+            uploads:uploads,
+            nextid,
+            userPermissions,
+            settings,
+            owner
+        });
+    }
+    else if( userPermissions.Values.hasOwnProperty("writeprojects"))
+    {
+        if(user)
+        {
+            req.flash("success", "this user can only write projects, can only view his projects")
+            uploads = await upload.GetUserUploadsLastUpdatedResourceFiltered(user.id , ["project"])
+        }
+        else
+        {
+            req.flash("success", "this user can only write projects, can only view his projects")
+            uploads = await upload.GetAnonUploadsLastUpdatedResourceFiltered(["project"])
+        }
+        
+        res.render("projects",{
+            title:title,
+            user:user,
+            uploads:uploads,
+            nextid,
+            userPermissions,
+            settings,
+            owner
+        });
+    }
+    else
+    {
+        req.flash("error","this user cant read or write projects")
+        res.redirect("/home")
+    }
     
-    res.render("projects",{
-        title:title,
-        user:user,
-        uploads:uploads,
-        nextid,
-        userPermissions,
-        settings,
-        owner
-    });
+    
+    
 })
 
 router.get("/blogs",getUserPermissions,async (req,res) => 
@@ -88,12 +120,34 @@ router.get("/blogs",getUserPermissions,async (req,res) =>
 
     const settings = await Settings.getSettings();
 
-    if(userPermissions.Values.hasOwnProperty(`readblogs`))
-    {
+    let uploads
 
-        let test = "blogs"
-        let uploads = await upload.GetAllUploadsDescendingOfType("blog");
-    
+    if (userPermissions.Values.hasOwnProperty("readblogs"))
+    {
+        uploads = await upload.GetUploadsLastUpdatedResourceFiltered(["blogs"])
+        res.render("blogs",{
+            title:title,
+            user:user,
+            uploads:uploads,
+            nextid,
+            userPermissions,
+            settings,
+            owner
+        });
+    }
+    else if( userPermissions.Values.hasOwnProperty("writeblogs"))
+    {
+        if(user)
+        {
+            req.flash("success", "this user can only write blogs, can only view his blogs")
+            uploads = await upload.GetUserUploadsLastUpdatedResourceFiltered(user.id , ["blog"])
+        }
+        else
+        {
+            req.flash("success", "this user can only write blogs, can only view his blogs")
+            uploads = await upload.GetAnonUploadsLastUpdatedResourceFiltered(["blog"])
+        }
+        
         res.render("blogs",{
             title:title,
             user:user,
@@ -106,7 +160,7 @@ router.get("/blogs",getUserPermissions,async (req,res) =>
     }
     else
     {
-        req.flash("error","")
+        req.flash("error","this user cant read or write blogs")
         res.redirect("/home")
     }
 

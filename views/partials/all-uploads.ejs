@@ -82,7 +82,7 @@
                     <div>
                         <div class="user-image-name">
                             <% if (upload.User == undefined) { %>
-                                <p>anonymous</p>
+                                <p>(anonymous)</p>
                             <%}else{ %>
                                 <a href=<%=`/users/${upload.User._id}`%> >
                                     <%- include("User-image",{user, User : upload.User ,settings})-%> 
@@ -125,7 +125,7 @@
                     <div class="user-image-name">
                         <% if (upload.User == undefined) { %>
                             <%- include("User-image",{user, User : upload.User ,settings})-%>
-                            <p>anonymous</p>
+                            <p>(anonymous)</p>
                         <%}else{ %>
                             <a href=<%=`/users/${upload.User._id}`%> >
                                 <%- include("User-image",{user, User : upload.User ,settings})-%> 
@@ -187,7 +187,10 @@
                             <p class="content">
                                 <%= upload.Content.Text %>
                             </p>
+                            <% if (upload.Sub_Upload.length  && upload.User || upload.User && user && upload.User.id  == user.id) { %> 
+
                                 <a href=<%=`/upload/${upload._id}/ `%> class="log-out">View progress</a>
+                            <% } %>
                             
                         </div>
                         <div>

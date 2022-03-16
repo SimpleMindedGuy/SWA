@@ -47,7 +47,11 @@ router.post(`/createowner`,getUserPermissions,async function (req,res)
     
     let error=[];
     let success = [];
-    
+    if(! userPermissions.Values.hasOwnProperty("readusers"))
+    {
+        req.flash("error","you cant read users profiles")
+        res.redirect("/home")
+    }
     if(user && user.DefaultAccount)
     {
         let title = "setup"
@@ -286,7 +290,7 @@ router.get("/list",getUserPermissions, async (req,res)=> {
     const user = await typeof req.user !='undefined' ? await res.locals.User : undefined;
     const userPermissions = await res.locals.Permissions 
     const UserList = await Users.GetAllUsers();
-    const UserGroupList = await UserGroups.GetAllUserGroups();
+    const UserGroupList = await UserGroups.GetUserGroupsBelow(0);
     const settings = await Settings.getSettings();
     const owner = await Users.GetOwner()
 
@@ -441,6 +445,76 @@ router.post("/:user_id",getUserPermissions, async (req,res)=> {
     // console.log(title)
 })
 
+
+router.delete("/:user_id",getUserPermissions, async (req,res)=> {
+    if(mongo.ObjectID.isValid(req.params.user_id) )
+    {
+        let error=[]
+        let success =[]
+        
+        const userinfo = await Users.GetUserById(req.params.user_id)
+        const user = await typeof req.user !='undefined' ? await res.locals.User : undefined;
+        const userPermissions = res.locals.Permissions;
+        const settings = await Settings.getSettings();
+        const owner = await Users.GetOwner()
+
+        if(!userinfo )
+        {
+            error.push("user does not exist")
+            if(error.length > 0 )
+            {
+                req.flash("error", error)
+            }
+            if(success.length > 0 )
+            {
+                req.flash("success", success)
+            }
+            res.redirect("/home")
+        }
+        else if(userinfo && user.id == userinfo.id)
+        {
+            await Users.DeleteUserByUserID(userinfo.User_ID)
+            .then(()=>{
+                success.push("User has been deleted")
+
+                if(error.length > 0 )
+                {
+                    req.flash("error", error)
+                }
+                if(success.length > 0 )
+                {
+                    req.flash("success", success)
+                }
+                res.redirect("/home")
+
+            })
+            .catch((err)=>{
+                console.log("error while deleting a user")
+                req.flash("error","error while deleting a user")
+                res.redirect(`/users/${req.params.user_id}`)
+            })
+        }
+        else
+        {
+            error.push("you dont have permission to delete this user ")
+            if(error.length > 0 )
+            {
+                req.flash("error", error)
+            }
+            if(success.length > 0 )
+            {
+                req.flash("success", success)
+            }
+            res.redirect("/home")
+        }
+    }
+    else
+    {
+        req.flash("error","invalid user id")
+        res.redirect("/home")
+    }
+    
+})
 //          /users/61430515a6d9b7db132a3934/image
 router.post("/:user_id/image",getUserPermissions,UploadFiles.UploadMiddleware, async (req,res)=> {
     const userinfo = await Users.GetUserById(req.params.user_id)
@@ -839,7 +913,7 @@ router.delete("/:user_id/image",getUserPermissions,UploadFiles.UploadMiddleware,
     if(user && user._id.toString() == userinfo._id.toString())
     {
 
-        if(await Users.DeleteImage(userinfo._id))
+        if(await Users.DeleteImage(userinfo.id))
         {
             success.push("image deleted")
         }

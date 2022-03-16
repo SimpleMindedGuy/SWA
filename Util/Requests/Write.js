@@ -1053,27 +1053,34 @@ async function AddUsersToGroups(req,res,user,userPermissions,ReqUsers,ReqGroups,
             {
                 if(Array.isArray(ReqGroups))
                 {
-                    const grp = await UserGroups.FindUserGroup(ReqGroups)
+                    const grp = await UserGroups.GetUserGroup(ReqGroups)
                     for(const GRP of ReqGroups){
                         if(grp)
                         {
-                            console.log(GRP)
+                            console.log(grp.Priority)
+                            console.log(userPermissions.Values["manageusers"])
+                            console.log(grp.Priority > userPermissions.Values["manageusers"])
+                            
                             if(grp.Priority > userPermissions.Values["manageusers"])
                             {
                                 await UserGroups.AddGroupMember(GRP,usr.id)
                             }
                             else
                             {
-                                console.log(`cant manage user ${USR} roles`);
+                                console.log(`cant add to group ${grp.Group_Name}`);
                             }
                         }
                     }
                 }
                 else
                 {
-                    const grp = await UserGroups.FindUserGroup(ReqGroups)
+                    const grp = await UserGroups.GetUserGroup(ReqGroups)
                     if(grp)
                     {
+                        console.log(grp.Priority)
+                        console.log(userPermissions.Values["manageusers"])
+                        console.log(grp.Priority > userPermissions.Values["manageusers"])
+
                         if(grp.Priority > userPermissions.Values["manageusers"])
                         {
                             await UserGroups.AddGroupMember(ReqGroups,usr.id)
@@ -1096,36 +1103,46 @@ async function AddUsersToGroups(req,res,user,userPermissions,ReqUsers,ReqGroups,
         const usr = await Users.GetUserByUserID(ReqUsers)
         if(user && usr.Roles[0].Priority > userPermissions.Values["manageusers"])
         {
-
+            console.log(ReqGroups)
             if(Array.isArray(ReqGroups))
             {
                 for(const GRP of ReqGroups){
-                    const grp = await UserGroups.FindUserGroup(GRP)
+                    const grp = await UserGroups.GetUserGroup(GRP)
                     if(grp )
                     {
+                        console.log(grp.Priority)
+                        console.log(userPermissions.Values["manageusers"])
+                        console.log(grp.Priority > userPermissions.Values["manageusers"])
+
                         if(grp.Priority > userPermissions.Values["manageusers"])
                         {
                             await UserGroups.AddGroupMember(GRP,usr.id)
                         }
                         else
                         {
-                            console.log(`cant manage user ${USR} roles`);
+                            console.log(`cant add to group ${grp.Group_Name}`);
                         }
                     }
                 }
             }
             else
             {
-                const grp = await UserGroups.FindUserGroup(ReqGroups)
-                if(await UserGroups.FindUserGroup(ReqGroups))
+                console.log(ReqGroups)
+                const grp = await UserGroups.GetUserGroup(ReqGroups)
+                if(grp)
                 {
+                    console.log(grp)
+                    console.log(grp.Priority)
+                    console.log(userPermissions.Values["manageusers"])
+                    console.log(grp.Priority > userPermissions.Values["manageusers"])
+
                     if(grp.Priority > userPermissions.Values["manageusers"])
                     {
                         await UserGroups.AddGroupMember(ReqGroups,usr.id)
                     }
                     else
                     {
-                        console.log(`cant manage user ${usr} roles`);
+                        console.log(`cant add to group ${grp.Group_Name}`);
                     }
                 }
             }
@@ -1134,7 +1151,7 @@ async function AddUsersToGroups(req,res,user,userPermissions,ReqUsers,ReqGroups,
         }
         else
         {
-            console.log(`cant manage user ${usr} roles`);
+            console.log(`cant manage user ${usr.User_ID} roles`);
         }
     }
 

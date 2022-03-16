@@ -2,8 +2,8 @@ class KeyTable{
     constructor()
     {
         this.Values = {};
-        this.Act = {};
-        this.Rec={};
+        this.Act = [];
+        this.Rec=[];
         // this.keys = [];
     }
     
@@ -36,61 +36,33 @@ class KeyTable{
     }
 
     findAct(key){
-        if(this.Act.hasOwnProperty(key))
+        if(this.Act.includes(key))
             return true
         return false
     }
-    addAct(key,value)
+    addAct(key)
     {
-        if(!this.Act.hasOwnProperty(key))
+        if(!this.Act.includes(key))
         {
-            this.Act[key] = {};
+            this.Act.push(key);
             // this.keys.push(key);
-        }
-        this.Act[key] = value;
-    }
-    getAct(key){
-        if(this.Act.hasOwnProperty(key) && this.Act[key])
-            return this.Act[key];
-        }
-    removeAct(key)
-    {
-        if(this.Act.hasOwnProperty(key) && this.Act[key])
-        {
-            delete this.Act[key];
-            // console.log(`${this.keys.indexOf(key)-1}, ${this.keys.indexOf(key)} `)
-            // this.keys.splice(this.keys.indexOf(key)-1,1);
         }
     }
 
     findRec(key){
-        if(this.Rec.hasOwnProperty(key))
+        if(this.Rec.includes(key))
             return true
         return false
     }
-    addRec(key,value)
+    addRec(key,)
     {
-        if(!this.Rec.hasOwnProperty(key))
+        if(!this.Rec.includes(key))
         {
-            this.Rec[key] = {};
+            this.Rec.push(key);
             // this.keys.push(key);
         }
-        this.Rec[key] = value;
     }
-    getRec(key){
-        if(this.Rec.hasOwnProperty(key) && this.Rec[key])
-            return this.Rec[key];
-        }
-    removeRec(key)
-    {
-        if(this.Rec.hasOwnProperty(key) && this.Rec[key])
-        {
-            delete this.Rec[key];
-            // console.log(`${this.keys.indexOf(key)-1}, ${this.keys.indexOf(key)} `)
-            // this.keys.splice(this.keys.indexOf(key)-1,1);
-        }
-    }
-
+    
 
 }
 module.exports.KeyTable = KeyTable;

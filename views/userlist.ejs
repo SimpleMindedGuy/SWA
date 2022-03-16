@@ -70,10 +70,12 @@
                         <h6>
                             <%= group.Group_Name %>
                         </h6>
-                        <input type="checkbox" name="Groups" id="<%=group.Group_Name%>" value="<%=group.Group_Name%>" onchange="showSubmitButton();checkMSGs()" >
-                        <label class="cancel-button" for="<%=group.Group_Name%>">
-                            <%- include("partials/icons/plus_icon") -%>
-                        </label>
+                        <% if(userPermissions.Values.hasOwnProperty("manageusers") && userPermissions.Values["manageusers"] < group.Priority) { %>
+                            <input type="checkbox" name="Groups" id="<%=group.Group_Name%>" value="<%=group.Group_Name%>" onchange="showSubmitButton();checkMSGs()" >
+                            <label class="cancel-button" for="<%=group.Group_Name%>">
+                                <%- include("partials/icons/plus_icon") -%>
+                            </label>
+                        <% } %>
                     </div>
                     <hr>
                 <% }) %>

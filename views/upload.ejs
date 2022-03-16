@@ -17,7 +17,7 @@
                         <div class="user-image-name">
                             <% if (upload.User == undefined) { %>
                                 <%- include("partials/User-image",{user, User : upload.User  ,settings})-%> 
-                                <p>anonymous</p>
+                                <p>(anonymous)</p>
                             <%}else{ %>
                                 <a href=<%=`/users/${upload.User._id}`%> >
                                     <%- include("partials/User-image",{user, User : upload.User  ,settings})-%> 
@@ -162,7 +162,7 @@
                                         <div class="user-image-name">
 
                                             <% if (Comment.User == undefined) { %>
-                                                <p>anonymous</p>
+                                                <p>(anonymous)</p>
                                             <%}else{ %>
                                                 <a href=<%=`/users/${Comment.User._id}`%> >
                                                     <%- include("partials/User-image",{user, User : Comment.User ,settings})-%> 

@@ -1,6 +1,6 @@
 <%- include('partials/page-header'); -%> 
 
-<% if(userPermissions.Values.hasOwnProperty("writeprojects") && ! settings.options.includes("Personal_Website")) {%> 
+<% if(userPermissions.Values.hasOwnProperty("writeprojects") && ! settings.options.includes("Personal_Website") ||  user && user.User_Groups.includes("Owner") ) {%> 
     <%- include('partials/project-form',{uploads,user,req:"/projects",nextid}) -%>
 <% } %>
 

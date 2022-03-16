@@ -49,8 +49,9 @@ router.post("/",ensureOwner,getUserPermissions,UploadFiles.UploadMiddleware,asyn
 
     const oldsettings = await Settings.getSettings();
 
-    console.log(req.body)
-    console.log(req.body.options)
+    // console.log(req.body)
+    // console.log(req.body.options)
+    console.log(req.body.removeimage)
 
     let name, options=[],icon,Default_Role;
     // console.log(req.body)
@@ -92,95 +93,78 @@ router.post("/",ensureOwner,getUserPermissions,UploadFiles.UploadMiddleware,asyn
         Default_Role = req.body.Default_Role
     }
 
-    if(req.body.removeimage=="on" && !req.files.image)
+
+    if(req.body.removeimage)
+    {
+        if(!req.files.image)
+        {
+            console.log("resetting default image")
+
+            icon ="/icons/defult-user.svg"
+
+            if(await oldsettings.icon != "/icons/defult-user.svg")
+            {
+                console.log("remove on trying to delete image")
+                await UploadFiles.DeleteImage(oldsettings.icon,"defualtImage")
+                
+            }
+            else
+            {
+                console.log("old image was not found")
+            }
+
+        }
+        else if(req.files.image)
+        {
+
+            icon = req.files.image[0].filename
+            if(await oldsettings.icon != "/icons/defult-user.svg")
+            {
+                console.log("remove on trying to delete image")
+                await UploadFiles.DeleteImage(oldsettings.icon,"defualtImage")
+                
+            }
+            else
+            {
+                console.log("old image was not found")
+            }
+
+        }
+        
+    }
+    else
     {
         console.log("resetting default image")
 
         icon ="/icons/defult-user.svg"
 
-        if(await oldsettings.icon != "/icons/defult-user.svg")
+        if(!req.files.image)
         {
-            console.log("remove on trying to delete image")
-            await UploadFiles.UploadGFS.find({
-                filename : oldsettings.icon,
-                metadata : "defualtImage",
-            })
-            .toArray(async(err,files)=>
-            {
-                if(!files || files.length === 0 ) return res.status(400).send("no files exists");
-                if( err) return res.status(404).send(err);
+            console.log("resetting default image")
 
-                await UploadFiles.UploadGFS.find({ _id : files[0]._id}).toArray(async (error,file)=>
-                {
-                    if(error) return res.status(400).send("no files exists");
-                    if(file) await UploadFiles.UploadGFS.delete(mongoose.Types.ObjectId(files[0]._id));
-                });
-            })
+            icon =oldsettings.icon
+
+
         }
-        else
+        else if(req.files.image)
         {
-            console.log("old image was not found")
+
+            icon = req.files.image[0].filename
+            if(await oldsettings.icon != "/icons/defult-user.svg")
+            {
+                console.log("remove on trying to delete image")
+                await UploadFiles.DeleteImage(oldsettings.icon,"defualtImage")
+                
+            }
+            else
+            {
+                console.log("old image was not found")
+            }
+
         }
 
     }
-    else if (req.files.image)
-    {
-        if(await oldsettings.icon != "/icons/defult-user.svg")
-        {
-            console.log("found file trying to remove old file")
-
-            await UploadFiles.UploadGFS.find({
-                filename : oldsettings.icon,
-                metadata : "defualtImage",
-            })
-            .toArray(async(err,files)=>
-            {
-                if(!files || files.length === 0 ) return res.status(400).send("no files exists");
-                if( err) return res.status(404).send(err);
-
-                await UploadFiles.UploadGFS.find({ _id : files[0]._id}).toArray(async (error,file)=>
-                {
-                    if(error) return res.status(400).send("no files exists");
-                    if(file) await UploadFiles.UploadGFS.delete(mongoose.Types.ObjectId(files[0]._id));
-                });
-            })
-        }
-        else
-        {
-            console.log("old image was not found")
-        }
-
-        icon = req.files.image[0].filename
-    }
-    else if(!req.files.image)
-    {
-        console.log("no file found")
-        console.log(oldsettings)
-        if(await oldsettings.icon != "/icons/defult-user.svg")
-        {
-            console.log("trying to delete old image")
-            await UploadFiles.UploadGFS.find({
-                filename : oldsettings.icon,
-                metadata : "defualtImage",
-            })
-            .toArray(async(err,files)=>
-            {
-                if(!files || files.length === 0 ) return res.status(400).send("no files exists");
-                if( err) return res.status(404).send(err);
-
-                await UploadFiles.UploadGFS.find({ _id : files[0]._id}).toArray(async (error,file)=>
-                {
-                    if(error) return res.status(400).send("no files exists");
-                    if(file) await UploadFiles.UploadGFS.delete(mongoose.Types.ObjectId(files[0]._id));
-                });
-            })
-        }
-        else
-        {
-            console.log("old image was not found")
-        }
-        icon ="/icons/defult-user.svg"
-    }
+    
 
     if(error.length > 0 )
     {

@@ -2,22 +2,22 @@ module.exports = {
 
     Resources:
     {
-        "users" : "Grants some access to other users data.\nwrite : ability able to create a new user.\nRead : ability to view some of the other users data.\ndelete : ability to delete other users.\nManage : ability to add or remove roles form users",
+        "user" : "Grants some access to other users data.\nwrite : ability able to create a new user.\nRead : ability to view some of the other users data.\ndelete : ability to delete other users.\nManage : ability to add or remove roles form users",
 
 
-        "posts" : "Grants access to uploads of type of (post)\nwrite : ability to create uploads of type (post)\nread : be able to view other's uploads of type (post)\ndelete : ability to delete other's uploads of type (post)\nManage : show/hide other's uploads of type (post) and limit who can comment on the upload",
+        "post" : "Grants access to uploads of type of (post)\nwrite : ability to create uploads of type (post)\nread : be able to view other's uploads of type (post)\ndelete : ability to delete other's uploads of type (post)\nManage : show/hide other's uploads of type (post) and limit who can comment on the upload",
 
 
-        "projects" : "Grants access to uploads of type of (project)\nwrite : ability to create uploads of type (project)\nread : be able to view other's uploads of type (project)\ndelete : ability to delete other's uploads of type (project)\nManage : show/hide other's uploads of type (project) and limit who can comment on the upload",
+        "project" : "Grants access to uploads of type of (project)\nwrite : ability to create uploads of type (project)\nread : be able to view other's uploads of type (project)\ndelete : ability to delete other's uploads of type (project)\nManage : show/hide other's uploads of type (project) and limit who can comment on the upload",
 
-        "blogs" : "Grants access to all uploads of type of (blog)\nwrite : ability to create uploads of type (blog)\nread : be able to view other's uploads of type (blog)\ndelete : ability to delete other's uploads of type (blog)\nManage : show/hide other's uploads of type (blog) and limit who can comment on the upload",
+        "blog" : "Grants access to all uploads of type of (blog)\nwrite : ability to create uploads of type (blog)\nread : be able to view other's uploads of type (blog)\ndelete : ability to delete other's uploads of type (blog)\nManage : show/hide other's uploads of type (blog) and limit who can comment on the upload",
 
 
-        "comments" : "Grants access to uploads of type of (blog)\nwrite : ability to create uploads of type (blog)\nread : be able to view other's uploads of type (blog)\ndelete : ability to delete other's uploads of type (blog)\nManage : does nothing yet",
+        "comment" : "Grants access to uploads of type of (blog)\nwrite : ability to create uploads of type (blog)\nread : be able to view other's uploads of type (blog)\ndelete : ability to delete other's uploads of type (blog)\nManage : does nothing yet",
 
-        "roles" : "Grants access to Roles(User Groups)\nwrite : ability to create new Role\nread : be able to view Roles\ndelete : ability to delete Roles\nManage : Edit Roles permissions (Resources and actions)",
+        "role" : "Grants access to Roles(User Groups)\nwrite : ability to create new Role\nread : be able to view Roles\ndelete : ability to delete Roles\nManage : Edit Roles permissions (Resources and actions)",
 
-        "groups" : "Grants access to Groups\nwrite : ability to create new Groups\nread : be able to view Groups\ndelete : ability to delete Groups\nManage : Edit Groups settings (public or private and Roles within the groups)\nNOTE: this feature is not implemented yet",
+        "group" : "Grants access to Groups\nwrite : ability to create new Groups\nread : be able to view Groups\ndelete : ability to delete Groups\nManage : Edit Groups settings (public or private and Roles within the groups)\nNOTE: this feature is not implemented yet",
     },
     Actions:
     {

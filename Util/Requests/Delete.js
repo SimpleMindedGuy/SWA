@@ -24,7 +24,7 @@ async function RemoveUsersFromGroups(req,res,user,userPermissions,ReqUsers,ReqGr
                 if(Array.isArray(ReqGroups))
                 {
                     for(const GRP of ReqGroups){
-                        const grp = await UserGroups.FindUserGroup(GRP)
+                        const grp = await UserGroups.GetUserGroup(GRP)
                         if(grp)
                         {
                             if(grp.Priority > userPermissions.Values["manageusers"])
@@ -40,7 +40,7 @@ async function RemoveUsersFromGroups(req,res,user,userPermissions,ReqUsers,ReqGr
                 }
                 else
                 {
-                    const grp = await UserGroups.FindUserGroup(ReqGroups)
+                    const grp = await UserGroups.GetUserGroup(ReqGroups)
                     if(grp)
                     {
                         if(grp.Priority > userPermissions.Values["manageusers"])
@@ -72,8 +72,8 @@ async function RemoveUsersFromGroups(req,res,user,userPermissions,ReqUsers,ReqGr
             if(Array.isArray(ReqGroups))
             {
                 for(const GRP of ReqGroups){
-                    const grp = await UserGroups.FindUserGroup(GRP)
-                    if(await UserGroups.FindUserGroup(GRP))
+                    const grp = await UserGroups.GetUserGroup(GRP)
+                    if(grp)
                     {
                         console.log(GRP)
                         if(grp.Priority > userPermissions.Values["manageusers"])
@@ -90,7 +90,7 @@ async function RemoveUsersFromGroups(req,res,user,userPermissions,ReqUsers,ReqGr
             }
             else
             {
-                const grp = await UserGroups.FindUserGroup(ReqGroups)
+                const grp = await UserGroups.GetUserGroup(ReqGroups)
                 if(grp)
                 {
                     if(grp.Priority > userPermissions.Values["manageusers"])

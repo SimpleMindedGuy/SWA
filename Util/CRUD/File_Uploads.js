@@ -10,7 +10,7 @@ const multer = require('multer')
 
 const {GridFsStorage} = require("multer-gridfs-storage")
 const GridFsStream = require ("gridfs-stream")
-const mongoPath = require("../../config/keys").MongoURI;
+const mongoPath = process.env.SimpleWSMongoURI;
 
 
 const UploadFileConn = mongoose.createConnection(mongoPath,{
@@ -87,32 +87,63 @@ const UploadMiddleware = (req,res,next) =>{
 module.exports.UploadMiddleware = UploadMiddleware;
 
 
-async function DeleteImage(image, upload_id)
+async function DeleteImage(filename, metadata)
 {
-    return await UploadGFS.find({ filename : image , metadata : mongoose.Types.ObjectId(upload_id)}).toArray(async (error,img)=>
+    if(await mongoose.Types.ObjectId.isValid(metadata))
     {
-        if(error) 
+        return await UploadGFS.find({ filename : filename , metadata : mongoose.Types.ObjectId(metadata)}).toArray(async (error,img)=>
         {
-            console.log ("error while looking for file ");
-            console.log (error);
-            return false
-        }
-        if(!img.length)
-        {
-            console.log("file was not found")
-            return false
-        } 
-
-        return await UploadGFS.delete(mongoose.Types.ObjectId(img[0]._id),(err)=>{
-            if(err)
+            if(error) 
             {
-                console.log("Error while deleting file")
-                console.log(err)
+                console.log ("error while looking for file ");
+                console.log (error);
                 return false
             }
-            return true
+            if(!img.length)
+            {
+                console.log("file was not found")
+                return false
+            } 
+
+            return await UploadGFS.delete(mongoose.Types.ObjectId(img[0]._id),(err)=>{
+                if(err)
+                {
+                    console.log("Error while deleting file")
+                    console.log(err)
+                    return false
+                }
+                return true
+            });
         });
-    });
+    }
+    else
+    {
+        return await UploadGFS.find({ filename : filename , metadata : metadata}).toArray(async (error,img)=>
+        {
+            if(error) 
+            {
+                console.log ("error while looking for file ");
+                console.log (error);
+                return false
+            }
+            if(!img.length)
+            {
+                console.log("file was not found")
+                return false
+            } 
+
+            return await UploadGFS.delete(mongoose.Types.ObjectId(img[0]._id),(err)=>{
+                if(err)
+                {
+                    console.log("Error while deleting file")
+                    console.log(err)
+                    return false
+                }
+                return true
+            });
+        });
+    }
+    
 }
 
 module.exports.DeleteImage = DeleteImage;

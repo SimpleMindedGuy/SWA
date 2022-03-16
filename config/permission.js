@@ -2,14 +2,14 @@ module.exports = {
 
     Resources:
     [
-        "users",
-        "posts",
-        "projects",
-        "blogs",
-        "comments",
+        "user",
+        "post",
+        "project",
+        "blog",
+        "comment",
 
-        "roles",
-        "groups",
+        "role",
+        "group",
     ],
     Actions:
     [

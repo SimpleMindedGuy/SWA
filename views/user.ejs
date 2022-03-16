@@ -57,26 +57,7 @@
     <h1><%= userinfo.User_Name %> 
         <% if(user && user._id.toString() == userinfo._id){ %> 
             <label for="bio-edit" class="profile-edit">
-                <svg
-                    viewBox="0 0 5.2916668 5.2916669"
-                    class="upload-icons"
-                    >
-                    <path
-                    id="rect841"
-                    style="opacity:1;;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers fill stroke"
-                    d="m 3.2699189,0.8982329 1.1183475,1.1183474 c 0.026133,0.026133 0.023153,0.07119 -0.00668,0.1010222 L 2.0194053,4.4797797 c -0.029834,0.029834 -1.94637113,0.7537506 -1.93746819,0.7178829 0,0 0.72450053,-1.9302906 0.75433493,-1.960125 L 3.1688944,0.9049151 c 0.029834,-0.029834 0.074892,-0.032815 0.1010247,-0.00668 z"
-                    sodipodi:nodetypes="csssssscc" />
-                    <rect
-                    style="opacity:1;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers fill stroke"
-                    id="rect880"
-                    width="1.6882606"
-                    height="0.98188043"
-                    x="2.8991148"
-                    y="-2.9078808"
-                    rx="0.066627115"
-                    ry="0.066627115"
-                    transform="rotate(45)" />
-                </svg>
+                <%- include("partials/icons/pin_icon") -%>
         
             </label>
         <% } %>
@@ -104,8 +85,13 @@
     
             <div class="buttons" style="place-items: center;place-self: center;">
                 <input type="submit" value="Update">
+                <% if(!userinfo.User_Groups.includes("Owner")){ %>
+                    <label for="delete_user" class="warning-button"> Delete User</label>
+                <% } %>
+
             </div>
         </form>
+        <%- include('partials/conform-popup', {input_id : "delete_user" , req : `/users/${userinfo._id}?_method=DELETE`,message : "Delete this user ?"}) -%>
     <% } %>
     <h3><%= userinfo.Welcome %></h3>
     <p>
@@ -123,26 +109,7 @@
         Skills
         <% if(user && user._id.toString() == userinfo._id){ %> 
             <label for="add-skill" class="profile-edit">
-                <svg
-                    viewBox="0 0 5.2916668 5.2916669"
-                    class="upload-icons"
-                    >
-                    <path
-                    id="rect841"
-                    style="opacity:1;;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers fill stroke"
-                    d="m 3.2699189,0.8982329 1.1183475,1.1183474 c 0.026133,0.026133 0.023153,0.07119 -0.00668,0.1010222 L 2.0194053,4.4797797 c -0.029834,0.029834 -1.94637113,0.7537506 -1.93746819,0.7178829 0,0 0.72450053,-1.9302906 0.75433493,-1.960125 L 3.1688944,0.9049151 c 0.029834,-0.029834 0.074892,-0.032815 0.1010247,-0.00668 z"
-                    sodipodi:nodetypes="csssssscc" />
-                    <rect
-                    style="opacity:1;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers fill stroke"
-                    id="rect880"
-                    width="1.6882606"
-                    height="0.98188043"
-                    x="2.8991148"
-                    y="-2.9078808"
-                    rx="0.066627115"
-                    ry="0.066627115"
-                    transform="rotate(45)" />
-                </svg>
+                <%- include("partials/icons/pin_icon") -%>
     
             </label>
         <% }%>
@@ -238,42 +205,12 @@
                 <% if(user && user.id.toString() == userinfo._id.toString()) { %> 
                     <input id="Edit-skill-<%=index%>" type="checkbox">
                     <label for="Edit-skill-<%=index%>" class="edit-button">
-                        <svg
-                        width="20"
-                        height="5"
-                        viewBox="0 0 5.2916666 1.3229168"
-                        version="1.1"
-                        class="edit-icon"
-                        >
-                            <g
-                            inkscape:label="Layer 1"
-                            inkscape:groupmode="layer"
-                            id="layer1">
-                                <circle
-                                style="fill-opacity:1;stroke:none;stroke-width:0.0978133;stroke-linecap:square;stroke-linejoin:round"
-                                id="path846-3-6"
-                                cx="4.3335695"
-                                cy="0.67886633"
-                                r="0.65526402" />
-                                <circle
-                                style="fill-opacity:1;stroke:none;stroke-width:0.0978133;stroke-linecap:square;stroke-linejoin:round"
-                                id="path846-3-6-7"
-                                cx="2.6790216"
-                                cy="0.67886633"
-                                r="0.65526402" />
-                                <circle
-                                style="fill-opacity:1;stroke:none;stroke-width:0.0978133;stroke-linecap:square;stroke-linejoin:round"
-                                id="path846-3-6-7-5"
-                                cx="0.95849198"
-                                cy="0.67886633"
-                                r="0.65526402" />
-                            </g>
-                        </svg>
+                        <%- include("partials/icons/edit_icon") -%>
                     </label>
                     
                     
-                    <div class="option-menu" style="--amount : 2">
-                        <input onclick="CloseOptionMenu(this)"class="option" type="submit" value="Edit" style="--order : 1">
+                    <div class="option-menu" style="--amount : 1">
+                       
                         <form method="post" action=<%=`/users/${userinfo._id}/skill/${skill._id}?_method=DELETE`%> class="option" style="--order : 2" >
                             <input onclick="CloseOptionMenu(this)" type="submit" value="Delete" >
                         </form>                 
@@ -300,26 +237,7 @@
     <h2>Contacts
         <% if(user && user._id.toString() == userinfo._id){ %> 
             <label for="add-contact" class="profile-edit">
-                <svg
-                    viewBox="0 0 5.2916668 5.2916669"
-                    class="upload-icons"
-                    >
-                    <path
-                    id="rect841"
-                    style="opacity:1;;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers fill stroke"
-                    d="m 3.2699189,0.8982329 1.1183475,1.1183474 c 0.026133,0.026133 0.023153,0.07119 -0.00668,0.1010222 L 2.0194053,4.4797797 c -0.029834,0.029834 -1.94637113,0.7537506 -1.93746819,0.7178829 0,0 0.72450053,-1.9302906 0.75433493,-1.960125 L 3.1688944,0.9049151 c 0.029834,-0.029834 0.074892,-0.032815 0.1010247,-0.00668 z"
-                    sodipodi:nodetypes="csssssscc" />
-                    <rect
-                    style="opacity:1;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:markers fill stroke"
-                    id="rect880"
-                    width="1.6882606"
-                    height="0.98188043"
-                    x="2.8991148"
-                    y="-2.9078808"
-                    rx="0.066627115"
-                    ry="0.066627115"
-                    transform="rotate(45)" />
-                </svg>
+                <%- include("partials/icons/pin_icon") -%>
     
             </label>
         <% }%>
@@ -373,40 +291,9 @@
                         
                 <input id="Edit-contact-<%= index %>" type="checkbox">
                 <label for="Edit-contact-<%= index %>" class="edit-button">
-                    <svg
-                    width="20"
-                    height="5"
-                    viewBox="0 0 5.2916666 1.3229168"
-                    version="1.1"
-                    class="edit-icon"
-                    >
-                        <g
-                        inkscape:label="Layer 1"
-                        inkscape:groupmode="layer"
-                        id="layer1">
-                            <circle
-                            style="fill-opacity:1;stroke:none;stroke-width:0.0978133;stroke-linecap:square;stroke-linejoin:round"
-                            id="path846-3-6"
-                            cx="4.3335695"
-                            cy="0.67886633"
-                            r="0.65526402" />
-                            <circle
-                            style="fill-opacity:1;stroke:none;stroke-width:0.0978133;stroke-linecap:square;stroke-linejoin:round"
-                            id="path846-3-6-7"
-                            cx="2.6790216"
-                            cy="0.67886633"
-                            r="0.65526402" />
-                            <circle
-                            style="fill-opacity:1;stroke:none;stroke-width:0.0978133;stroke-linecap:square;stroke-linejoin:round"
-                            id="path846-3-6-7-5"
-                            cx="0.95849198"
-                            cy="0.67886633"
-                            r="0.65526402" />
-                        </g>
-                    </svg>
+                    <%- include("partials/icons/edit_icon") -%>
                 </label>    
-                <div class="option-menu" style="--amount : 2">
-                    <input onclick="CloseOptionMenu(this)"class="option" type="submit" value="Edit" style="--order : 1">
+                <div class="option-menu" style="--amount : 1">
                     <form method="post" action=<%=`/users/${userinfo._id}/contact/${contact._id}?_method=DELETE`%> class="option" style="--order : 2" >
                         <input onclick="CloseOptionMenu(this)" type="submit" value="Delete" >
                     </form>                 

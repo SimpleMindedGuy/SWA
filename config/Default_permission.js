@@ -3,12 +3,12 @@ module.exports = {
     Admin:{
         Resources:
         [
-            "users",
-            "roles",
-            "posts",
-            "projects",
-            "blogs",
-            "comments",
+            "user",
+            "role",
+            "post",
+            "project",
+            "blog",
+            "comment",
         ],
         Actions:
         [
@@ -25,10 +25,10 @@ module.exports = {
     Member:{
         Resources:
         [
-            "posts",
-            "projects",
-            "blogs",
-            "comments",
+            "post",
+            "project",
+            "blog",
+            "comment",
         ],
         Actions:
         [
@@ -41,10 +41,10 @@ module.exports = {
     Anon:{
         Resources:
         [
-            "posts",
-            "projects",
-            "blogs",
-            "comments",
+            "post",
+            "project",
+            "blog",
+            "comment",
         ],
         Actions:
         [

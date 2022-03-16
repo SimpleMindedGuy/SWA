@@ -29,8 +29,21 @@ module.exports = {
 
             for (const Act of Group.Group_Actions) {
                 for (const Rec of Group.Group_Resources) {
-                    if(!UserPermissions.findKey(`${Act}${Rec}`))
-                        UserPermissions.addValue(`${Act}${Rec}`,Group.Priority)
+                    if(!UserPermissions.findKey(`${Act}${Rec}s`))
+                        UserPermissions.addValue(`${Act}${Rec}s`,Group.Priority)
+                }
+            }
+
+            for (const Act of Group.Group_Actions) {
+                if(!UserPermissions.findAct(`${Act}`))
+                {
+                    UserPermissions.addAct(`${Act}`)
+                }
+            }
+            for (const Rec of Group.Group_Resources) {
+                if(!UserPermissions.findRec(`${Rec}`))
+                {
+                    UserPermissions.addRec(`${Rec}`)
                 }
             }
             // console.log(Group.Group_Actions)
@@ -50,24 +63,27 @@ module.exports = {
                 // console.log(User.Roles[role])
                 for (const Act of User.Roles[role].Group_Actions) {
                     for (const Rec of User.Roles[role].Group_Resources) {
-                        if(!UserPermissions.findKey(`${Act}${Rec}`))
-                            UserPermissions.addValue(`${Act}${Rec}`,User.Roles[role].Priority)
+                        if(!UserPermissions.findKey(`${Act}${Rec}s`))
+                            UserPermissions.addValue(`${Act}${Rec}s`,User.Roles[role].Priority)
                     }
                 }
 
-                if(User.Roles[role].Group_Actions.includes("manage") && User.Roles[role].Group_Resources.includes("roles"))
-                {
-                    for (const Act of User.Roles[role].Group_Actions) {
-                        if(!UserPermissions.findAct(`${Act}`))
-                            UserPermissions.addAct(`${Act}`,User.Roles[role].Priority)
+                
+                for (const Act of User.Roles[role].Group_Actions) {
+                    if(!UserPermissions.findAct(`${Act}`))
+                    {
+                        UserPermissions.addAct(`${Act}`)
                     }
-                    for (const Rec of User.Roles[role].Group_Resources) {
-                        if(!UserPermissions.findRec(`${Rec}`))
-                            UserPermissions.addRec(`${Rec}`,User.Roles[role].Priority)
-                    }
-                    
                 }
-            }
+                for (const Rec of User.Roles[role].Group_Resources) {
+                    if(!UserPermissions.findRec(`${Rec}`))
+                    {
+                        UserPermissions.addRec(`${Rec}`)
+                    }
+                }
+                    
+                
+            } 
 
             res.locals.User = User;
             res.locals.Permissions = UserPermissions;

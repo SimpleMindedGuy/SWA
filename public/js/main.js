@@ -23,8 +23,8 @@ document.documentElement.querySelectorAll(`.editable-ordered-list-container`).fo
             }
             const children = [...container.querySelectorAll(".editable-ordered-list-element")]
             children.forEach((element,index)=>{
-                element.querySelector(`.list-element-edit`).querySelector("p").innerHTML = `${index+UnDragCont.children.length+1}`
-                element.querySelector(`.list-element-edit`).querySelector(`input`).value = index + UnDragCont.children.length+1
+                element.querySelector(`.list-element-edit`).querySelector("p").innerHTML = `${index+UnDragCont.children.length}`
+                element.querySelector(`.list-element-edit`).querySelector(`input`).value = index + UnDragCont.children.length
                 element.querySelector(`.list-element-edit`).querySelector(`input`).checked = true
                 console.log(element.querySelector(`input`).value)
                 console.log("list")
@@ -75,8 +75,8 @@ async function resetEditableList()
 
     const children = [...container.querySelectorAll(".editable-ordered-list-element")]
     children.forEach((element,index)=>{
-        element.querySelector(`.list-element-edit`).querySelector("p").innerHTML = `${index+UnDragCont.children.length+1}`
-        element.querySelector(`.list-element-edit`).querySelector(`input`).value = index + UnDragCont.children.length+1
+        element.querySelector(`.list-element-edit`).querySelector("p").innerHTML = `${index+UnDragCont.children.length}`
+        element.querySelector(`.list-element-edit`).querySelector(`input`).value = index + UnDragCont.children.length
         element.querySelector(`.list-element-edit`).querySelector(`input`).checked = true
     })
 }
@@ -364,9 +364,9 @@ function ShowDropedFile(dropzone,file,target,input)
     }
     else if(dropzone.classList.contains("single")){
 
-        if(dropzone.classList.contains("removeicon"))
+        if(dropzone.classList.contains("removeimage"))
         {
-            dropzone.parentElement.querySelector("#removeicon").checked=false;
+            dropzone.parentElement.querySelector("#removeimage").checked=false;
             reader.onload = ()=>
             {
                 dropzone.innerHTML=`
@@ -375,7 +375,7 @@ function ShowDropedFile(dropzone,file,target,input)
                     <div class="image-blur">
                         <div class="cover"></div>
 
-                        <label class="upload-remove" onclick="RemoveFile(this)" for="removeicon">
+                        <label class="upload-remove" onclick="RemoveFile(this)" for="removeimage">
                             <div class="x-line1"></div>
                             <div class="x-line2"></div>
                         </label>
@@ -537,9 +537,9 @@ function RemoveFile(Xbutton)
                 <p class="note">click / drag and drop to add pictures</p>
                 </label>`
 
-                if(dropzone.classList.contains("removeicon"))
+                if(dropzone.classList.contains("removeimage"))
                 {
-                    dropzone.parentElement.querySelector("#removeicon").checked=true;
+                    dropzone.parentElement.querySelector("#removeimage").checked=true;
                 }
             }
             if (dropzone.classList.contains("icon")) 

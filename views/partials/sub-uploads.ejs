@@ -7,7 +7,7 @@
                     <div>
                         <div class="user-image-name">
                             <% if (upload.User == undefined) { %>
-                                <p>anonymous</p>
+                                <p>(anonymous)</p>
                             <%}else{ %>
                                 <a href=<%=`/users/${upload.User._id}`%> >
                                     <%- include("User-image",{user, User : upload.User ,settings})-%> 

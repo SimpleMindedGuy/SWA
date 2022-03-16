@@ -307,6 +307,7 @@ async function setGroupActions(group,Actions)
 {
     console.log(Actions)
     for (const Action in Actions) {
+        
         if(! await Permissions.FindAction(Actions[Action]))
             Actions.splice(Actions[Action]-1,1)
     

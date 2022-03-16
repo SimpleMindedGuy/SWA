@@ -1,6 +1,6 @@
 <%- include('partials/page-header' ,{settings,owner,user}); -%> 
 
-    <% if(userPermissions.Values.hasOwnProperty("writeposts") && !settings.options.includes("Personal_Website")) {%> 
+    <% if(userPermissions.Values.hasOwnProperty("writeposts") && !settings.options.includes("Personal_Website") || user && user.User_Groups.includes("Owner") ) {%> 
         <%- include('partials/post-form', {req:"/posts",nextid}); -%> 
     <%}%>
 
