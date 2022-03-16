@@ -33,7 +33,7 @@ module.exports.FindWhiteSpace = FindWhiteSpace;
 function RemoveWhiteSpace(text)
 {
     // clearing too much space before/after/and between the text the text
-    let spaces = new RegExp(/(^\s+|[^\w]+\s+$)|((?<=\ )\ +)+/gmi);
+    let spaces = new RegExp(/(^\s+|^[\w]+\s$)|((?<=\ )\ +)+/gmi);
     text= text.replace(spaces,'');
     return  text
 }

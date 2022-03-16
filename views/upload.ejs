@@ -114,28 +114,17 @@
                     </div>
                 <% } %>
             
-            <% if(userPermissions.Values.writecomments && userPermissions.Values.writecomments !== -1) {%>
+            <% if(userPermissions.Values.hasOwnProperty("writecomments")) {%>
                 <div class="row">
                     <form enctype="multipart/form-data" method="POST" action=<%=`/upload/${upload._id}/comment`%>>
                         <input type="text" name="id"  value="<%=nextid%>" style="display: none;">
-        
-                        <div class="input comment-ui">
-                            <% if (user == undefined) { %>
-                                <%- include("partials/User-image",{user, User : user  ,settings})-%> 
-                                
-                            <%}else{ %>
-                                <a href=<%=`/users/${user._id}`%> >
-                                    <%- include("partials/User-image",{user, User : user  ,settings})-%> 
-                                </a>
-                                
-                            <% } %>
-                            
-                            <textarea class="comment-input" name="Comment_Text" oninput="ActiveTextarea(this)" onresize="ActiveTextarea(this)" ondragover="ActiveDropZone(this)" ondragleave="DeActiveDropZone(this)" ondrop="DropFile(this,event)" ></textarea>
                     
-                            
+                        <div class="input comment-ui">
+                            <%- include("partials/User-image",{user, User : user ,settings})-%>
+                            <textarea class="comment-input" name="Comment_Text" oninput="ActiveTextarea(this)" onresize="ActiveTextarea(this)" ondragover="ActiveDropZone(this)" ondragleave="DeActiveDropZone(this)" ondrop="DropFile(this,event)" ></textarea>
                             <div></div>
                             <input name="image" type="file" id="file-input" onclick="ReadInputFiles(this)" onchange="InputFiles(this , event)" >
-                                <div class="dropzone one"></div>
+                            <div class="dropzone one"></div>
                         </div>
                         <div class="buttons">
                             <input  type="submit" value="Post">
@@ -143,8 +132,9 @@
                         </div>
                     </form>
                 </div>
+                
             <% } %>
-            <% if(userPermissions.Values.readcomments && userPermissions.Values.readcomments !== -1 || userPermissions.Values.writecomments && userPermissions.Values.writecomments !== -1){ %> 
+            <% if(userPermissions.Values.hasOwnProperty("readcomments")  ){ %> 
                 <div class="row">
 
                     <div class="buttons" style="position:static">

@@ -63,11 +63,11 @@ module.exports.CreateUpload = CreateUpload;
 async function Update_Upload(Traget_id,Content,Date)
 {
     // Content : Content,
-    // Modified_Date : Date,
+    // Upload_Date : Date,
     const success = await UploadSchema.findOneAndUpdate
     (
         {_id : mongoose.Types.ObjectId(Traget_id)},
-        {$set:{"Content" : Content,"Modified_Date" : Date}}
+        {$set:{"Content" : Content,"Upload_Date" : Date}}
     )
     .then((doc)=>{
         if(!doc)
@@ -544,7 +544,7 @@ module.exports.GetAllUploadsDescending = GetAllUploadsDescending;
 async function GetAllUploadsDescendingOfType(type)
 {
     const Uploads = await UploadSchema.find({Type : type,"Parent_Upload":{$exists : false}})
-    .sort({Modified_Date: -1})
+    .sort({Upload_Date: -1})
     .populate("User")
     .populate({
         path: 'Comments',
@@ -667,7 +667,7 @@ module.exports.GetCommentById = GetCommentById;
 async function GetUploadsLastUpdated()
 {
     const Uploads = await UploadSchema.find()
-    .sort({Modified_Date: -1})
+    .sort({Upload_Date: -1})
     .populate("User")
     .populate({
             path: 'Comments',
@@ -718,7 +718,7 @@ module.exports.GetUploadsLastUpdated = GetUploadsLastUpdated;
 async function GetUploadsLastUpdatedOfType(type)
 {
     const Uploads = await UploadSchema.find({Type : type})
-    .sort({Modified_Date: -1})
+    .sort({Upload_Date: -1})
     .populate("User")
     .populate({
             path: 'Comments',
@@ -769,7 +769,7 @@ module.exports.GetUploadsLastUpdatedOfType = GetUploadsLastUpdatedOfType;
 async function GetAnonUploadsLastUpdatedOfType(type) 
 {
     const Uploads = await UploadSchema.find({User : undefined,Type : type})
-    .sort({Modified_Date: -1})
+    .sort({Upload_Date: -1})
     .populate("User")
     .populate({
             path: 'Comments',
@@ -820,7 +820,7 @@ module.exports.GetAnonUploadsLastUpdatedOfType = GetAnonUploadsLastUpdatedOfType
 async function GetAnonUploadsLastUpdated()
 {
     const Uploads = await UploadSchema.find({User : undefined})
-    .sort({Modified_Date: -1})
+    .sort({Upload_Date: -1})
     .populate("User")
     .populate({
             path: 'Comments',
@@ -875,7 +875,7 @@ async function GetAnonUploadsLastUpdatedResourceFiltered(resources=[])
         return undefined
     }
     const Uploads = await UploadSchema.find({User : undefined,Type : { $in : resources } })
-    .sort({Modified_Date: -1})
+    .sort({Upload_Date: -1})
     .populate("User")
     .populate({
             path: 'Comments',
@@ -933,7 +933,7 @@ async function GetUploadsLastUpdatedResourceFiltered(resources=[])
     {
 
         const Uploads = await UploadSchema.find({Type : { $in : resources } })
-        .sort({Modified_Date: -1})
+        .sort({Upload_Date: -1})
         .populate("User")
         .populate({
                 path: 'Comments',
@@ -986,7 +986,7 @@ module.exports.GetUploadsLastUpdatedResourceFiltered = GetUploadsLastUpdatedReso
 async function GetUserUploadsLastUpdatedResourceFiltered(user_id,resources)
 {
     const Uploads = await UploadSchema.find({User : mongoose.Types.ObjectId( user_id) ,Type : { $in : resources } })
-    .sort({Modified_Date: -1})
+    .sort({Upload_Date: -1})
     .populate("User")
     .populate({
             path: 'Comments',

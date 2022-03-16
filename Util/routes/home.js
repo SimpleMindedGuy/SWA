@@ -124,7 +124,7 @@ router.get("/blogs",getUserPermissions,async (req,res) =>
 
     if (userPermissions.Values.hasOwnProperty("readblogs"))
     {
-        uploads = await upload.GetUploadsLastUpdatedResourceFiltered(["blogs"])
+        uploads = await upload.GetUploadsLastUpdatedResourceFiltered(["blog"])
         res.render("blogs",{
             title:title,
             user:user,
@@ -257,7 +257,7 @@ router.post("/upload/:upload_id",getUserPermissions,UploadFiles.UploadMiddleware
         }
         else
         {
-            if(user.User_Groups.include("Owner"))
+            if(user.User_Groups.includes("Owner"))
             {
                 if(uploads.Parent_Upload == undefined)
                 {
@@ -318,7 +318,7 @@ router.get("/upload/:upload_id",getUserPermissions,async(req,res) =>
     {
         
         const uploads = await upload.GetUploadById(req.params.upload_id);
-        if(uploads.User && user && user._id.toString() == uploads.User._id || userPermissions.Values[`read${uploads.Type}s`] )
+        if(userPermissions.Values.hasOwnProperty(`read${uploads.Type}s`) )
         {
             let title = uploads.Content.Title != undefined ? uploads.Content.Title : uploads.Content.Text; 
             let nextid = mongoose.Types.ObjectId();
@@ -348,7 +348,7 @@ router.get("/upload/:upload_id/edit",getUserPermissions,UploadFiles.UploadMiddle
 
     const user = await typeof req.user !='undefined' ? await res.locals.User : undefined;
     const userPermissions = res.locals.Permissions;
-
+    const owner = await Users.GetOwner()
 
     if(mongo.ObjectID.isValid(req.params.upload_id))
     {
@@ -359,7 +359,7 @@ router.get("/upload/:upload_id/edit",getUserPermissions,UploadFiles.UploadMiddle
             let title = uploads.Content.Title != undefined ? uploads.Content.Title : uploads.Content.Text; 
             let nextid = mongoose.Types.ObjectId();
         
-            res.render("edit",{title:title,user:user,upload:uploads,nextid,settings});
+            res.render("edit",{title:title,user:user,upload:uploads,nextid,settings,owner,userPermissions});
         }
         else
         {
