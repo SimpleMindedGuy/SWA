@@ -36,7 +36,7 @@ router.get("/home",checkSetupUser,getUserPermissions,async (req,res) =>
     const owner = await Users.GetOwner()
     const settings = await Settings.getSettings();
 
-    let uploads = await upload.GetUploadsLastUpdatedResourceFiltered(userPermissions.Rec);
+    let uploads = await upload.GetParentUploadsLastUpdatedResourceFiltered(userPermissions.Rec);
     
     let nextid =await  mongoose.Types.ObjectId();
     res.render("home",{
@@ -64,7 +64,7 @@ router.get("/projects",getUserPermissions,async (req,res) =>
 
     if (userPermissions.Values.hasOwnProperty("readprojects"))
     {
-        uploads = await upload.GetUploadsLastUpdatedResourceFiltered(["project"])
+        uploads = await upload.GetParentUploadsLastUpdatedResourceFiltered(["project"])
         res.render("projects",{
             title:title,
             user:user,
@@ -80,12 +80,12 @@ router.get("/projects",getUserPermissions,async (req,res) =>
         if(user)
         {
             req.flash("success", "this user can only write projects, can only view his projects")
-            uploads = await upload.GetUserUploadsLastUpdatedResourceFiltered(user.id , ["project"])
+            uploads = await upload.GetAnonParentUploadsLastUpdatedResourceFiltered(user.id , ["project"])
         }
         else
         {
             req.flash("success", "this user can only write projects, can only view his projects")
-            uploads = await upload.GetAnonUploadsLastUpdatedResourceFiltered(["project"])
+            uploads = await upload.GetAnonParentUploadsLastUpdatedResourceFiltered(["project"])
         }
         
         res.render("projects",{
@@ -124,7 +124,7 @@ router.get("/blogs",getUserPermissions,async (req,res) =>
 
     if (userPermissions.Values.hasOwnProperty("readblogs"))
     {
-        uploads = await upload.GetUploadsLastUpdatedResourceFiltered(["blog"])
+        uploads = await upload.GetParentUploadsLastUpdatedResourceFiltered(["blog"])
         res.render("blogs",{
             title:title,
             user:user,
@@ -140,12 +140,12 @@ router.get("/blogs",getUserPermissions,async (req,res) =>
         if(user)
         {
             req.flash("success", "this user can only write blogs, can only view his blogs")
-            uploads = await upload.GetUserUploadsLastUpdatedResourceFiltered(user.id , ["blog"])
+            uploads = await upload.GetAnonParentUploadsLastUpdatedResourceFiltered(user.id , ["blog"])
         }
         else
         {
             req.flash("success", "this user can only write blogs, can only view his blogs")
-            uploads = await upload.GetAnonUploadsLastUpdatedResourceFiltered(["blog"])
+            uploads = await upload.GetAnonParentUploadsLastUpdatedResourceFiltered(["blog"])
         }
         
         res.render("blogs",{
@@ -214,6 +214,7 @@ router.post("/upload/:upload_id/comment",getUserPermissions,UploadFiles.UploadMi
 router.post("/upload/:upload_id",getUserPermissions,UploadFiles.UploadMiddleware,async(req,res) =>
 {
     const settings = await Settings.getSettings();
+    const owner = await Users.GetOwner()
 
     if(mongo.ObjectID.isValid(req.params.upload_id))
     {

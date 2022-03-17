@@ -48,6 +48,12 @@ router.put("/",getUserPermissions,async(req,res)=>{
     const userPermissions = res.locals.Permissions;
     
     console.log(req.body)
+    for(const Role in req.body)
+    {
+        console.log(Role)
+        console.log(req.body[Role])
+        await UserGroups.setGroupPriority(Role,req.body[Role])
+    }
     res.redirect("/usergroups")
 })
 

@@ -463,6 +463,36 @@ async function setGroupResources(group,Resources=[])
 module.exports.setGroupResources = setGroupResources;
 
 
+async function setGroupPriority(group,Priority )
+{
+
+    const Act = await UserGroupSchema.findOneAndUpdate(
+        {Group_Name : group},
+        {$set:{Priority: Priority}})  
+        .then((act)=>{
+            if(act)
+            {
+                // console.log(act)
+                console.log(`user group (${group}) set to ${Priority}`)
+                return true
+            }
+            else
+            {
+                console.log(`Failed to set user group (${group}) Priority`)
+                return false
+            }
+        })
+        .catch((err)=>{
+            // console.log(err)
+            console.log(`something went wrong while setting to usergroup (${group})'s priority to  (${Priority})`)
+            return false
+        })
+
+    return Act;
+    // console.log(`Action ${Act}`)
+
+}
+module.exports.setGroupPriority = setGroupPriority;
 
 
 async function AddGroupMember(group,id)
