@@ -45,7 +45,7 @@ And it should be ready to use once it connects to the database
 ### note
 This is still first “release”, so I don't expect it to work everywhere
 
-you can also view the design on [this link](https://simplemindedguy.github.io/Personal-website-design/)
+you can also view the design on [this link](https://simplemindedguy.github.io/Portfolio/)
 
 ## todo
 - [ ] refactor the whole web app
