@@ -1,4 +1,4 @@
-# Simple WS
+# SWS (Simple Web App)
 A simple website "solution" for a personal or community website.
 
 - It can work as Personal website or as Image board.
